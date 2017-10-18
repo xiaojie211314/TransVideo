@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_demo-test" default="compile.module.demo-test">
+  <dirname property="module.demo-test.basedir" file="${ant.file.module_demo-test}"/>
+  
+  <property name="module.jdk.home.demo-test" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.demo-test" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.demo-test" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.demo-test" value="-encoding UTF-8 -source 8 -target 1.8 ${compiler.args}"/>
+  
+  <property name="demo-test.output.dir" value="${module.demo-test.basedir}/target/classes"/>
+  <property name="demo-test.testoutput.dir" value="${module.demo-test.basedir}/target/test-classes"/>
+  
+  <path id="demo-test.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="demo-test.module.production.classpath">
+    <path refid="${module.jdk.classpath.demo-test}"/>
+    <path refid="library.maven:_org.springframework:spring-core:4.2.1.release.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.2.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-beans:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-expression:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-web:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-webmvc:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-context:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-context-support:unknown.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-aop:4.2.1.release.classpath"/>
+    <path refid="library.maven:_aopalliance:aopalliance:1.0.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-aspects:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.aspectj:aspectjweaver:1.8.6.classpath"/>
+    <path refid="library.maven:_org.aspectj:aspectjrt:1.8.7.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.5.2.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.4.4.classpath"/>
+    <path refid="library.maven:_org.apache.commons:commons-lang3:3.4.classpath"/>
+    <path refid="library.maven:_commons-io:commons-io:2.4.classpath"/>
+    <path refid="library.maven:_commons-fileupload:commons-fileupload:1.3.1.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.10.classpath"/>
+    <path refid="library.maven:_org.apache.commons:commons-compress:1.10.classpath"/>
+    <path refid="library.maven:_javax.servlet:jstl:1.2.classpath"/>
+    <path refid="library.maven:_org.apache.taglibs:taglibs-standard-impl:1.2.5.classpath"/>
+    <path refid="library.maven:_javax.servlet:javax.servlet-api:3.1.0.classpath"/>
+    <path refid="library.maven:_net.sf.dozer:dozer:5.5.1.classpath"/>
+    <path refid="library.maven:_commons-beanutils:commons-beanutils:1.9.1.classpath"/>
+    <path refid="library.maven:_commons-collections:commons-collections:3.2.1.classpath"/>
+    <path refid="library.maven:_org.slf4j:slf4j-api:1.7.5.classpath"/>
+    <path refid="library.maven:_net.sf.dozer:dozer-spring:5.5.1.classpath"/>
+    <path refid="library.maven:_com.alibaba:fastjson:1.2.7.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:1.1.0.final.classpath"/>
+    <path refid="library.maven:_org.hibernate:hibernate-validator:5.2.1.final.classpath"/>
+    <path refid="library.maven:_org.jboss.logging:jboss-logging:3.2.1.final.classpath"/>
+    <path refid="library.maven:_com.fasterxml:classmate:1.1.0.classpath"/>
+    <path refid="library.maven:_com.fasterxml.jackson.core:jackson-core:2.6.2.classpath"/>
+    <path refid="library.maven:_com.fasterxml.jackson.core:jackson-databind:2.6.2.classpath"/>
+    <path refid="library.maven:_com.fasterxml.jackson.core:jackson-annotations:2.6.2.classpath"/>
+    <path refid="library.maven:_org.freemarker:freemarker:2.3.23.classpath"/>
+    <path refid="library.maven:_org.bouncycastle:bcprov-jdk16:1.46.classpath"/>
+    <path refid="library.maven:_org.projectlombok:lombok:1.16.6.classpath"/>
+    <path refid="library.maven:_org.slf4j:jcl-over-slf4j:1.7.5.classpath"/>
+    <path refid="library.maven:_ch.qos.logback:logback-access:1.1.3.classpath"/>
+    <path refid="library.maven:_ch.qos.logback:logback-classic:1.1.3.classpath"/>
+    <path refid="library.maven:_ch.qos.logback:logback-core:1.1.3.classpath"/>
+    <path refid="library.maven:_mysql:mysql-connector-java:5.1.35.classpath"/>
+    <path refid="library.maven:_commons-dbcp:commons-dbcp:1.4.classpath"/>
+    <path refid="library.maven:_commons-pool:commons-pool:1.5.4.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-jdbc:5.0.0.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-tx:5.0.0.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-orm:4.2.5.release.classpath"/>
+    <path refid="library.maven:_org.mybatis:mybatis:3.2.8.classpath"/>
+    <path refid="library.maven:_org.mybatis:mybatis-spring:1.2.3.classpath"/>
+    <path refid="library.maven:_tk.mybatis:mapper:3.3.8.classpath"/>
+  </path>
+  
+  <path id="demo-test.runtime.production.module.classpath">
+    <pathelement location="${demo-test.output.dir}"/>
+    <path refid="library.maven:_org.springframework:spring-core:4.2.1.release.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.2.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-beans:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-expression:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-web:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-webmvc:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-context:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-context-support:unknown.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-aop:4.2.1.release.classpath"/>
+    <path refid="library.maven:_aopalliance:aopalliance:1.0.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-aspects:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.aspectj:aspectjweaver:1.8.6.classpath"/>
+    <path refid="library.maven:_org.aspectj:aspectjrt:1.8.7.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.5.2.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.4.4.classpath"/>
+    <path refid="library.maven:_org.apache.commons:commons-lang3:3.4.classpath"/>
+    <path refid="library.maven:_commons-io:commons-io:2.4.classpath"/>
+    <path refid="library.maven:_commons-fileupload:commons-fileupload:1.3.1.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.10.classpath"/>
+    <path refid="library.maven:_org.apache.commons:commons-compress:1.10.classpath"/>
+    <path refid="library.maven:_javax.servlet:jstl:1.2.classpath"/>
+    <path refid="library.maven:_org.apache.taglibs:taglibs-standard-impl:1.2.5.classpath"/>
+    <path refid="library.maven:_net.sf.dozer:dozer:5.5.1.classpath"/>
+    <path refid="library.maven:_commons-beanutils:commons-beanutils:1.9.1.classpath"/>
+    <path refid="library.maven:_commons-collections:commons-collections:3.2.1.classpath"/>
+    <path refid="library.maven:_org.slf4j:slf4j-api:1.7.5.classpath"/>
+    <path refid="library.maven:_net.sf.dozer:dozer-spring:5.5.1.classpath"/>
+    <path refid="library.maven:_com.alibaba:fastjson:1.2.7.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:1.1.0.final.classpath"/>
+    <path refid="library.maven:_org.hibernate:hibernate-validator:5.2.1.final.classpath"/>
+    <path refid="library.maven:_org.jboss.logging:jboss-logging:3.2.1.final.classpath"/>
+    <path refid="library.maven:_com.fasterxml:classmate:1.1.0.classpath"/>
+    <path refid="library.maven:_com.fasterxml.jackson.core:jackson-core:2.6.2.classpath"/>
+    <path refid="library.maven:_com.fasterxml.jackson.core:jackson-databind:2.6.2.classpath"/>
+    <path refid="library.maven:_com.fasterxml.jackson.core:jackson-annotations:2.6.2.classpath"/>
+    <path refid="library.maven:_org.freemarker:freemarker:2.3.23.classpath"/>
+    <path refid="library.maven:_org.bouncycastle:bcprov-jdk16:1.46.classpath"/>
+    <path refid="library.maven:_org.projectlombok:lombok:1.16.6.classpath"/>
+    <path refid="library.maven:_org.slf4j:jcl-over-slf4j:1.7.5.classpath"/>
+    <path refid="library.maven:_ch.qos.logback:logback-access:1.1.3.classpath"/>
+    <path refid="library.maven:_ch.qos.logback:logback-classic:1.1.3.classpath"/>
+    <path refid="library.maven:_ch.qos.logback:logback-core:1.1.3.classpath"/>
+    <path refid="library.maven:_mysql:mysql-connector-java:5.1.35.classpath"/>
+    <path refid="library.maven:_commons-dbcp:commons-dbcp:1.4.classpath"/>
+    <path refid="library.maven:_commons-pool:commons-pool:1.5.4.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-jdbc:5.0.0.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-tx:5.0.0.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-orm:4.2.5.release.classpath"/>
+    <path refid="library.maven:_org.mybatis:mybatis:3.2.8.classpath"/>
+    <path refid="library.maven:_org.mybatis:mybatis-spring:1.2.3.classpath"/>
+    <path refid="library.maven:_tk.mybatis:mapper:3.3.8.classpath"/>
+  </path>
+  
+  <path id="demo-test.module.classpath">
+    <path refid="${module.jdk.classpath.demo-test}"/>
+    <pathelement location="${demo-test.output.dir}"/>
+    <path refid="library.maven:_org.springframework:spring-core:4.2.1.release.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.2.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-beans:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-expression:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-web:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-webmvc:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-context:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-context-support:unknown.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-aop:4.2.1.release.classpath"/>
+    <path refid="library.maven:_aopalliance:aopalliance:1.0.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-aspects:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.aspectj:aspectjweaver:1.8.6.classpath"/>
+    <path refid="library.maven:_org.aspectj:aspectjrt:1.8.7.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.5.2.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.4.4.classpath"/>
+    <path refid="library.maven:_org.apache.commons:commons-lang3:3.4.classpath"/>
+    <path refid="library.maven:_commons-io:commons-io:2.4.classpath"/>
+    <path refid="library.maven:_commons-fileupload:commons-fileupload:1.3.1.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.10.classpath"/>
+    <path refid="library.maven:_org.apache.commons:commons-compress:1.10.classpath"/>
+    <path refid="library.maven:_javax.servlet:jstl:1.2.classpath"/>
+    <path refid="library.maven:_org.apache.taglibs:taglibs-standard-impl:1.2.5.classpath"/>
+    <path refid="library.maven:_junit:junit:4.12.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_javax.servlet:javax.servlet-api:3.1.0.classpath"/>
+    <path refid="library.maven:_net.sf.dozer:dozer:5.5.1.classpath"/>
+    <path refid="library.maven:_commons-beanutils:commons-beanutils:1.9.1.classpath"/>
+    <path refid="library.maven:_commons-collections:commons-collections:3.2.1.classpath"/>
+    <path refid="library.maven:_org.slf4j:slf4j-api:1.7.5.classpath"/>
+    <path refid="library.maven:_net.sf.dozer:dozer-spring:5.5.1.classpath"/>
+    <path refid="library.maven:_com.alibaba:fastjson:1.2.7.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:1.1.0.final.classpath"/>
+    <path refid="library.maven:_org.hibernate:hibernate-validator:5.2.1.final.classpath"/>
+    <path refid="library.maven:_org.jboss.logging:jboss-logging:3.2.1.final.classpath"/>
+    <path refid="library.maven:_com.fasterxml:classmate:1.1.0.classpath"/>
+    <path refid="library.maven:_com.fasterxml.jackson.core:jackson-core:2.6.2.classpath"/>
+    <path refid="library.maven:_com.fasterxml.jackson.core:jackson-databind:2.6.2.classpath"/>
+    <path refid="library.maven:_com.fasterxml.jackson.core:jackson-annotations:2.6.2.classpath"/>
+    <path refid="library.maven:_org.freemarker:freemarker:2.3.23.classpath"/>
+    <path refid="library.maven:_org.bouncycastle:bcprov-jdk16:1.46.classpath"/>
+    <path refid="library.maven:_org.projectlombok:lombok:1.16.6.classpath"/>
+    <path refid="library.maven:_org.slf4j:jcl-over-slf4j:1.7.5.classpath"/>
+    <path refid="library.maven:_ch.qos.logback:logback-access:1.1.3.classpath"/>
+    <path refid="library.maven:_ch.qos.logback:logback-classic:1.1.3.classpath"/>
+    <path refid="library.maven:_ch.qos.logback:logback-core:1.1.3.classpath"/>
+    <path refid="library.maven:_mysql:mysql-connector-java:5.1.35.classpath"/>
+    <path refid="library.maven:_commons-dbcp:commons-dbcp:1.4.classpath"/>
+    <path refid="library.maven:_commons-pool:commons-pool:1.5.4.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-jdbc:5.0.0.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-tx:5.0.0.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-orm:4.2.5.release.classpath"/>
+    <path refid="library.maven:_org.mybatis:mybatis:3.2.8.classpath"/>
+    <path refid="library.maven:_org.mybatis:mybatis-spring:1.2.3.classpath"/>
+    <path refid="library.maven:_tk.mybatis:mapper:3.3.8.classpath"/>
+  </path>
+  
+  <path id="demo-test.runtime.module.classpath">
+    <pathelement location="${demo-test.testoutput.dir}"/>
+    <pathelement location="${demo-test.output.dir}"/>
+    <path refid="library.maven:_org.springframework:spring-core:4.2.1.release.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.2.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-beans:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-expression:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-web:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-webmvc:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-context:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-context-support:unknown.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-aop:4.2.1.release.classpath"/>
+    <path refid="library.maven:_aopalliance:aopalliance:1.0.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-aspects:4.2.1.release.classpath"/>
+    <path refid="library.maven:_org.aspectj:aspectjweaver:1.8.6.classpath"/>
+    <path refid="library.maven:_org.aspectj:aspectjrt:1.8.7.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.5.2.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.4.4.classpath"/>
+    <path refid="library.maven:_org.apache.commons:commons-lang3:3.4.classpath"/>
+    <path refid="library.maven:_commons-io:commons-io:2.4.classpath"/>
+    <path refid="library.maven:_commons-fileupload:commons-fileupload:1.3.1.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.10.classpath"/>
+    <path refid="library.maven:_org.apache.commons:commons-compress:1.10.classpath"/>
+    <path refid="library.maven:_javax.servlet:jstl:1.2.classpath"/>
+    <path refid="library.maven:_org.apache.taglibs:taglibs-standard-impl:1.2.5.classpath"/>
+    <path refid="library.maven:_junit:junit:4.12.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_javax.servlet:javax.servlet-api:3.1.0.classpath"/>
+    <path refid="library.maven:_net.sf.dozer:dozer:5.5.1.classpath"/>
+    <path refid="library.maven:_commons-beanutils:commons-beanutils:1.9.1.classpath"/>
+    <path refid="library.maven:_commons-collections:commons-collections:3.2.1.classpath"/>
+    <path refid="library.maven:_org.slf4j:slf4j-api:1.7.5.classpath"/>
+    <path refid="library.maven:_net.sf.dozer:dozer-spring:5.5.1.classpath"/>
+    <path refid="library.maven:_com.alibaba:fastjson:1.2.7.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:1.1.0.final.classpath"/>
+    <path refid="library.maven:_org.hibernate:hibernate-validator:5.2.1.final.classpath"/>
+    <path refid="library.maven:_org.jboss.logging:jboss-logging:3.2.1.final.classpath"/>
+    <path refid="library.maven:_com.fasterxml:classmate:1.1.0.classpath"/>
+    <path refid="library.maven:_com.fasterxml.jackson.core:jackson-core:2.6.2.classpath"/>
+    <path refid="library.maven:_com.fasterxml.jackson.core:jackson-databind:2.6.2.classpath"/>
+    <path refid="library.maven:_com.fasterxml.jackson.core:jackson-annotations:2.6.2.classpath"/>
+    <path refid="library.maven:_org.freemarker:freemarker:2.3.23.classpath"/>
+    <path refid="library.maven:_org.bouncycastle:bcprov-jdk16:1.46.classpath"/>
+    <path refid="library.maven:_org.projectlombok:lombok:1.16.6.classpath"/>
+    <path refid="library.maven:_org.slf4j:jcl-over-slf4j:1.7.5.classpath"/>
+    <path refid="library.maven:_ch.qos.logback:logback-access:1.1.3.classpath"/>
+    <path refid="library.maven:_ch.qos.logback:logback-classic:1.1.3.classpath"/>
+    <path refid="library.maven:_ch.qos.logback:logback-core:1.1.3.classpath"/>
+    <path refid="library.maven:_mysql:mysql-connector-java:5.1.35.classpath"/>
+    <path refid="library.maven:_commons-dbcp:commons-dbcp:1.4.classpath"/>
+    <path refid="library.maven:_commons-pool:commons-pool:1.5.4.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-jdbc:5.0.0.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-tx:5.0.0.release.classpath"/>
+    <path refid="library.maven:_org.springframework:spring-orm:4.2.5.release.classpath"/>
+    <path refid="library.maven:_org.mybatis:mybatis:3.2.8.classpath"/>
+    <path refid="library.maven:_org.mybatis:mybatis-spring:1.2.3.classpath"/>
+    <path refid="library.maven:_tk.mybatis:mapper:3.3.8.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.demo-test">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.demo-test">
+    <patternset refid="excluded.from.module.demo-test"/>
+  </patternset>
+  
+  <path id="demo-test.module.sourcepath">
+    <dirset dir="${module.demo-test.basedir}">
+      <include name="src/main/java"/>
+      <include name="src/main/resources"/>
+    </dirset>
+  </path>
+  
+  <path id="demo-test.module.test.sourcepath">
+    <dirset dir="${module.demo-test.basedir}">
+      <include name="src/test/java"/>
+      <include name="src/test/resources"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.demo-test" depends="compile.module.demo-test.production,compile.module.demo-test.tests" description="Compile module demo-test"/>
+  
+  <target name="compile.module.demo-test.production" depends="register.custom.compilers" description="Compile module demo-test; production classes">
+    <mkdir dir="${demo-test.output.dir}"/>
+    <javac2 destdir="${demo-test.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.demo-test}/javac">
+      <compilerarg line="${compiler.args.demo-test}"/>
+      <bootclasspath refid="demo-test.module.bootclasspath"/>
+      <classpath refid="demo-test.module.production.classpath"/>
+      <src refid="demo-test.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.demo-test"/>
+    </javac2>
+    
+    <copy todir="${demo-test.output.dir}">
+      <fileset dir="${module.demo-test.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.demo-test.basedir}/src/main/resources">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.demo-test.tests" depends="register.custom.compilers,compile.module.demo-test.production" description="compile module demo-test; test classes" unless="skip.tests">
+    <mkdir dir="${demo-test.testoutput.dir}"/>
+    <javac2 destdir="${demo-test.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.demo-test}/javac">
+      <compilerarg line="${compiler.args.demo-test}"/>
+      <bootclasspath refid="demo-test.module.bootclasspath"/>
+      <classpath refid="demo-test.module.classpath"/>
+      <src refid="demo-test.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.demo-test"/>
+    </javac2>
+    
+    <copy todir="${demo-test.testoutput.dir}">
+      <fileset dir="${module.demo-test.basedir}/src/test/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.demo-test.basedir}/src/test/resources">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.demo-test" description="cleanup module">
+    <delete dir="${demo-test.output.dir}"/>
+    <delete dir="${demo-test.testoutput.dir}"/>
+  </target>
+</project>
