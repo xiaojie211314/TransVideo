@@ -67,8 +67,30 @@ public class TransCodeTask implements Runnable {
 
 
     public boolean transfer(String infile,String outfile) {
+        /** -i  输入视频地址
+         * -c:v libx264 使用h.264 編碼
+         * -vcodec libx264 強制指定視頻編碼模式
+         * -b bitrate 设置比特率，缺省200kb/s
+         * -b:v 264k  视频码率
+         * -b:a 音频码率
+         * -bufsize 设置码率控制缓冲器的大小
+         * - minrate -maxrate 设置 码率的阙值(最大最小值)
+         *  -s 分辨率控制
+         * -g 关键帧建控制
+         * -vf fps=fps=25  帧率 25 或者 -r fps
+         * -aspect 16:9  横纵比 16:9  4:3
+         * -f mp4 强制转 mp4
+         * -y 覆盖输出文件
+         *
+         * 水印
+         * ./ffmpeg -i input.mp4 -i logo.phg -filter_complex overlay output.mp4  左上角
+         * overlay=W-w 右上角
+         * overlay=0:H-h 左下角
+         * overlay=W-w:H-h 右下角
+         */
 
-        String transferMp4 = "/usr/local/bin/ffmpeg -i  " + infile + " -vcodec libx264  -b:v 264k -vf fps=fps=25 -aspect 16:9  -f mp4 -y " + outfile;
+
+        String transferMp4 = "ffmpeg -i  " + infile + "  -c:v libx264  -g 10  -b:v 512k -bufsize 512k  -b:a 64k -r 30 -aspect 16:9  -f mp4 -y " + outfile;
         try {
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(transferMp4);
