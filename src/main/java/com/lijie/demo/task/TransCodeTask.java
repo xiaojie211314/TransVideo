@@ -90,7 +90,7 @@ public class TransCodeTask implements Runnable {
          */
 
 
-        String transferMp4 = "ffmpeg -i  " + infile + "  -c:v libx264  -g 10  -b:v 512k -bufsize 512k  -b:a 64k -r 30 -aspect 16:9  -f mp4 -y " + outfile;
+        String transferMp4 = "ffmpeg -i  " + infile + "  -c:v libx264  -g 10  -b:v 512k -bufsize 512k  -b:a 64k -r 30 -aspect 16:9  -f mp4 -y " + outfile; 
         try {
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(transferMp4);
