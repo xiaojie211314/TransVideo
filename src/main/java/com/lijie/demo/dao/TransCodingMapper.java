@@ -23,7 +23,10 @@ public interface TransCodingMapper {
      * 查询未执行的任务
      * @return
      */
-    List<VideoJob> findJob();
+    List<VideoJob> findJobTask();
+
+
+    List<VideoJob> findAllVideos();
 
 
 }

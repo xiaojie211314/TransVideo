@@ -4,16 +4,16 @@ import com.lijie.demo.bean.VideoJob;
 import com.lijie.demo.dao.TransCodingMapper;
 import com.lijie.demo.httpclient.HttpclientUtil;
 import com.lijie.demo.task.TransCodeTask;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.File;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,6 +21,7 @@ import java.util.List;
  */
 @Service
 public class InitJobService {
+    private Logger log = LoggerFactory.getLogger(InitJobService.class);
 
     @Autowired
     private HttpclientUtil httpclientUtil;
@@ -43,14 +44,15 @@ public class InitJobService {
         //创建目录
         creatUploadDir();
 
-        System.out.print(">>>>>>>>>>查询数据库任务,写到内存....");
+        log.info(">>>>>>>>>>查询数据库任务,写到内存....");
 
         //执行数据库写入内存
-        List<VideoJob> videoJobList = transCodingMapper.findJob();
+        List<VideoJob> videoJobList = transCodingMapper.findJobTask();
 
         if(null != videoJobList && !videoJobList.isEmpty())
             for (VideoJob videoJob: videoJobList){
-                taskExecutor.execute(new TransCodeTask(transCodingMapper,videoJob,httpclientUtil,outDir,uploadRootDir));
+
+                taskExecutor.execute(new TransCodeTask(transCodingMapper,videoJob,httpclientUtil));
             }
     }
 

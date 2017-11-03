@@ -1,9 +1,13 @@
 package com.lijie.demo.httpclient;
 
+import com.alibaba.fastjson.JSON;
+import com.lijie.demo.bean.VideoJob;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,15 +30,36 @@ public class HttpclientUtil {
     private HttpClient httpClient;
 
 
-    public String requestTest()
+    public String get(String url)
     {
-        return doGet("http://localhost:8080/video/success");
+        return doGet(url);
+    }
+    public String post(String url, VideoJob videoJob)
+    {
+        return doPost(url,videoJob);
     }
 
     private String doGet(String url) {
         try {
             HttpGet httpgets = new HttpGet(url);
             HttpResponse response = httpClient.execute(httpgets);
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                InputStream instreams = entity.getContent();
+                String str = convertStreamToString(instreams);
+                return str;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String doPost(String url,VideoJob videoJob) {
+        try {
+            HttpPost httpPost = new HttpPost(url);
+            httpPost.setEntity(new StringEntity(JSON.toJSONString(videoJob)));
+            HttpResponse response = httpClient.execute(httpPost);
             HttpEntity entity = response.getEntity();
             if (entity != null) {
                 InputStream instreams = entity.getContent();
