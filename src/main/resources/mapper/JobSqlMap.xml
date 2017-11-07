@@ -4,23 +4,23 @@
 
 
     <insert id="insertJob" useGeneratedKeys="true" keyProperty="id">
-        insert into transjob(filename,srcpath,despath,srcurl,desurl,status,counts,videokey,inputtime)values(#{filename},#{srcpath},#{despath},#{srcurl},#{desurl},#{status},#{counts},#{videokey},#{inputtime})
+        insert into video_job(filename,srcpath,despath,srcurl,desurl,status,counts,videokey,inputtime)values(#{filename},#{srcpath},#{despath},#{srcurl},#{desurl},#{status},#{counts},#{videokey},#{inputtime})
     </insert>
 
     <update id="updateJob">
-        update transjob set despath = #{despath}, desurl=#{desurl}, counts=#{counts},command=#{command}, msg=#{msg}, updatetime=#{updatetime}, status=#{status}, callmsg=#{callmsg} where id=#{id}
+        update video_job set despath = #{despath}, desurl=#{desurl}, counts=#{counts},command=#{command}, msg=#{msg}, updatetime=#{updatetime}, status=#{status}, callmsg=#{callmsg} where id=#{id}
     </update>
 
 
     <!--查找未执行的任务-->
     <select id="findJobTask" resultType="com.lijie.demo.bean.VideoJob">
-        select id,filename,command,srcpath,despath,srcurl,desurl,status,counts,msg,callmsg,videokey from transjob where status= 0 or  status=1 or (counts in (1,2) and status=3)
+        select id,filename,command,srcpath,despath,srcurl,desurl,status,counts,msg,callmsg,videokey from video_job where status= 0 or  status=1 or (counts in (1,2) and status=3)
     </select>
 
 
 
     <select id="findAllVideos" resultType="com.lijie.demo.bean.VideoJob">
-        select * from transjob
+        select * from video_job
     </select>
 
 </mapper>
