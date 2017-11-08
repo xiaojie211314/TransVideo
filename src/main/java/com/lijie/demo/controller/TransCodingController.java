@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -70,9 +69,6 @@ public class TransCodingController {
             return resResult;
         }
 
-
-
-
         //验证通过 上传
 
         Boolean  flag = transCodingService.upload(videoUpload);
@@ -93,16 +89,24 @@ public class TransCodingController {
 
     }
 
-    @RequestMapping("find")
+
+
+    @RequestMapping("getVideo")
     @ResponseBody
-    public ModelAndView success(){
+    public VideoJob getVideo(String videokey){
+
+        return  transCodingService.findVideoByVideokey(videokey);
+    }
+    @RequestMapping("look")
+    @ResponseBody
+    public List<VideoJob> success(){
 
         List<VideoJob>  videoJobList = transCodingService.findListVideos();
-        ModelAndView modelAndView = new ModelAndView("success");
+//        ModelAndView modelAndView = new ModelAndView("success");
+//
+//        //将数据放到request中
+//        modelAndView.addObject("dataList", videoJobList);
 
-        //将数据放到request中
-        modelAndView.addObject("dataList", videoJobList);
-
-        return modelAndView;
+        return videoJobList;
     }
 }

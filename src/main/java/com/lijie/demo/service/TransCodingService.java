@@ -98,8 +98,8 @@ public class TransCodingService {
      * @return
      */
     public String validateSign(VideoUpload videoUpload){
-        String remotesign = videoUpload.getSign()+videoUpload.getCallUrl()+videoUpload.getWidth()+videoUpload.getHeight();
-        String localsign = Const.sign_key+videoUpload.getCallUrl()+videoUpload.getWidth()+videoUpload.getHeight();
+        String remotesign = Utils.encode(videoUpload.getSign()+videoUpload.getCallUrl()+videoUpload.getWidth()+videoUpload.getHeight());
+        String localsign = Utils.encode(Const.sign_key+videoUpload.getCallUrl()+videoUpload.getWidth()+videoUpload.getHeight());
         if(remotesign.equals(localsign)){
             return localsign;
         }
@@ -110,6 +110,15 @@ public class TransCodingService {
     public List<VideoJob> findListVideos(){
 
         return transCodingMapper.findAllVideos();
+    }
+
+    /**
+     * 根据 videokey 查询视频
+     * @param videokey
+     * @return
+     */
+    public VideoJob findVideoByVideokey(String videokey){
+        return transCodingMapper.findyVideoByVideokey(videokey);
     }
 
     @Value("${video.in.srcpath}")

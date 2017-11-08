@@ -29,4 +29,12 @@ public interface TransCodingMapper {
     List<VideoJob> findAllVideos();
 
 
+    /**
+     * 根据 videokey 查询视频
+     * @param videokey
+     * @return
+     */
+    VideoJob findyVideoByVideokey(String videokey);
+
+
 }

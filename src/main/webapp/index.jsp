@@ -13,7 +13,7 @@
     <meta http-equiv="content-type" content="application/json" >
 </head>
 <body>
-<form action="/video/upload" method="post" enctype="multipart/form-data">
+<form action="video/upload" method="post" enctype="multipart/form-data">
     <input type="file" name="file" />
     <input type="text" name="callUrl" value="http://www.baidu.com">
     <input type="text" name="sign" value="83e89d7d87aec36ca1f4149fffe9b8ec">
