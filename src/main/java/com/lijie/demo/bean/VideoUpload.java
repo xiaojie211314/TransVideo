@@ -14,7 +14,7 @@ public class VideoUpload {
     private MultipartFile file;
     private String callUrl;//转码成功后回调地址
     private String sign;//接口安全通信钥匙
-    private String width = "180";//分辨率宽度 默认1024
+    private String width = "1080";//分辨率宽度 默认1024
     private String height = "720";// 分辨率高度,默认768
 
     private String videokey= UUID.randomUUID().toString();//视频唯一标识符

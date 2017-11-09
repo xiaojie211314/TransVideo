@@ -34,7 +34,7 @@ public class VideoJob {
 
     //附加
     private String sign;//接口安全通信钥匙
-    private String width = "1280";//分辨率宽度 默认640
+    private String width = "1080";//分辨率宽度 默认640
     private String height = "720";// 分辨率高度,默认480
 
 
