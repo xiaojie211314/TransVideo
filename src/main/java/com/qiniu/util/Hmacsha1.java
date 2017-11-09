@@ -1,10 +1,9 @@
-package com.lijie.demo.bean;
-
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+package com.qiniu.util;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 public class Hmacsha1 {
 

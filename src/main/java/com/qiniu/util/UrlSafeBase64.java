@@ -1,4 +1,4 @@
-package com.lijie.demo.bean;
+package com.qiniu.util;
 
 import java.nio.charset.Charset;
 
