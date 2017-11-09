@@ -28,7 +28,7 @@
     <!-- 通用mapper -->
     <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="sqlSessionFactoryBeanName" value="mybatisSqlSessionFactory"/>
-        <property name="basePackage" value="com.lijie.demo.dao"/>
+        <property name="basePackage" value="com.soocedu.video.dao"/>
         <property name="properties">
             <value>
                 mappers=tk.mybatis.mapper.common.Mapper,tk.mybatis.mapper.common.MySqlMapper

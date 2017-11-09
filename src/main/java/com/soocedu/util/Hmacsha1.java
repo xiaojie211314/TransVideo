@@ -1,4 +1,4 @@
-package com.qiniu.util;
+package com.soocedu.util;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;

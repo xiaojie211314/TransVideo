@@ -1,4 +1,4 @@
-package com.lijie.demo.bean;
+package com.soocedu.util;
 
 /**
  * Created by jieli on 2017/10/17.
@@ -6,7 +6,9 @@ package com.lijie.demo.bean;
 public interface Const {
     public final static String  WEBROOT= System.getProperty("webapp.root");
 
-    public final static  String  sign_key = "83e89d7d87aec36ca1f4149fffe9b8ec";
+    public final static  String  SECRET_KEY = "FXeoUwFhWShmpttTdNx74YIf1-tS-6O6enetIySN";
+    public final static  String  ACCESS_KEY = "HC5_GylOBVm8AY_XXFDD5Lkk0MiW7p2tjPG9_1o1";
+
 
 
     /**

@@ -1,8 +1,10 @@
-package com.lijie.demo.task;
+package com.soocedu.task;
 
-import com.lijie.demo.bean.VideoJob;
-import com.lijie.demo.dao.TransCodingMapper;
-import com.lijie.demo.httpclient.HttpclientUtil;
+import com.soocedu.video.bean.VideoCall;
+import com.soocedu.video.bean.VideoJob;
+import com.soocedu.video.bean.VideoResult;
+import com.soocedu.video.dao.TransCodingMapper;
+import com.soocedu.httpclient.HttpclientUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,18 +56,40 @@ public class TransCodeTask implements Runnable {
 
         }
 
-       String result = httpclientUtil.post(videoJob.getCallUrl(),videoJob);
+        //回调 php
+        callVideo(videoJob);
+
+
+
+    }
+
+
+
+    private void  callVideo(VideoJob videoJob){
+
+        VideoCall videoCall = new VideoCall();
+
+        videoCall.setId(videoJob.getPersistentid());
+        videoCall.setDesc("转码文件名称【"+videoJob.getFilename()+"】| 转码文件路径【"+videoJob.getDesurl()+"】");
+        videoCall.setItems(new VideoResult(videoJob.getDesurl()));
+        videoCall.setCode(videoJob.getStatus());
+        if(videoJob.getStatus()==0){
+            videoCall.setError("转码成功");
+        }else{
+            videoCall.setError("转码失败");
+        }
+
+        String result = httpclientUtil.post(videoJob.getPersistentNotifyUrl(),videoJob);
 
         if(result!=null){
-            videoJob.setCallmsg("回调服务器成功！");
+            videoJob.setError("回调服务器成功！");
             transCodingMapper.updateJob(videoJob);
         }else {
             videoJob.setStatus(4);
-            videoJob.setCallmsg("回调服务器失败！");
+            videoJob.setError("回调服务器失败！");
             transCodingMapper.updateJob(videoJob);
         }
     }
-
 
 
 

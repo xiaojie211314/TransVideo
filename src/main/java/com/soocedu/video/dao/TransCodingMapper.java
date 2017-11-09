@@ -1,7 +1,7 @@
-package com.lijie.demo.dao;
+package com.soocedu.video.dao;
 
 
-import com.lijie.demo.bean.VideoJob;
+import com.soocedu.video.bean.VideoJob;
 
 import java.util.List;
 

@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lijie.demo.dao.TransCodingMapper">
+<mapper namespace="com.soocedu.video.dao.TransCodingMapper">
 
 
     <insert id="insertJob" useGeneratedKeys="true" keyProperty="id">
-        insert into video_job(filename,srcpath,despath,srcurl,desurl,status,counts,videokey,inputtime)values(#{filename},#{srcpath},#{despath},#{srcurl},#{desurl},#{status},#{counts},#{videokey},#{inputtime})
+        insert into video_job(filename,srcpath,despath,srcurl,desurl,status,counts,persistentid,inputtime)values(#{filename},#{srcpath},#{despath},#{srcurl},#{desurl},#{status},#{counts},#{persistentid},#{inputtime})
     </insert>
 
     <update id="updateJob">
-        update video_job set despath = #{despath}, desurl=#{desurl}, counts=#{counts},command=#{command}, msg=#{msg}, updatetime=#{updatetime}, status=#{status}, callmsg=#{callmsg} where id=#{id}
+        update video_job set despath = #{despath}, desurl=#{desurl}, counts=#{counts},command=#{command}, msg=#{msg}, updatetime=#{updatetime}, status=#{status}, error=#{error} where id=#{id}
     </update>
 
 
     <!--查找未执行的任务-->
-    <select id="findJobTask" resultType="com.lijie.demo.bean.VideoJob">
-        select id,filename,command,srcpath,despath,srcurl,desurl,status,counts,msg,callmsg,videokey from video_job where status= 0 or  status=1 or (counts in (1,2) and status=3)
+    <select id="findJobTask" resultType="com.soocedu.video.bean.VideoJob">
+        select id,filename,command,srcpath,despath,srcurl,desurl,status,counts,msg,error,persistentid from video_job where status= 0 or  status=1 or (counts in (1,2) and status=3)
     </select>
 
     <!--根据 videokey 查询视频-->
-    <select id="findyVideoByVideokey" resultType="com.lijie.demo.bean.VideoJob" >
-        select id,filename,command,srcpath,despath,srcurl,desurl,status,counts,msg,callmsg,videokey from video_job where videokey=#{videokey}
+    <select id="findyVideoByVideokey" resultType="com.soocedu.video.bean.VideoJob" >
+        select id,filename,command,srcpath,despath,srcurl,desurl,status,counts,msg,error,persistentid from video_job where persistentid=#{persistentid}
     </select>
 
 
-    <select id="findAllVideos" resultType="com.lijie.demo.bean.VideoJob">
+    <select id="findAllVideos" resultType="com.soocedu.video.bean.VideoJob">
         select * from video_job order by id desc
     </select>
 

@@ -1,9 +1,9 @@
-package com.lijie.demo.service;
+package com.soocedu.video.service;
 
-import com.lijie.demo.bean.VideoJob;
-import com.lijie.demo.dao.TransCodingMapper;
-import com.lijie.demo.httpclient.HttpclientUtil;
-import com.lijie.demo.task.TransCodeTask;
+import com.soocedu.video.bean.VideoJob;
+import com.soocedu.video.dao.TransCodingMapper;
+import com.soocedu.httpclient.HttpclientUtil;
+import com.soocedu.task.TransCodeTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
