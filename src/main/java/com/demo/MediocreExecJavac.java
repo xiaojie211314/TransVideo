@@ -1,4 +1,4 @@
-package com.demo.bean;
+package com.demo;
 import java.io.*;
 import java.lang.*;
 

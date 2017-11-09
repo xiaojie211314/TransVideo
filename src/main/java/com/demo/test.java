@@ -1,4 +1,4 @@
-package com.demo.bean;
+package com.demo;
 
 import com.soocedu.util.Token;
 
