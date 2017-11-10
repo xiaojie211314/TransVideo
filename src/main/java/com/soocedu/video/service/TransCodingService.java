@@ -5,7 +5,7 @@ import com.soocedu.util.Const;
 import com.soocedu.video.bean.UploadFile;
 import com.soocedu.video.bean.VideoResult;
 import com.soocedu.video.bean.VideoJob;
-import com.soocedu.video.bean.Videos;
+import com.soocedu.video.bean.VideoLook;
 import com.soocedu.video.dao.TransCodingMapper;
 import com.soocedu.httpclient.HttpclientUtil;
 import com.soocedu.task.TransCodeTask;
@@ -74,7 +74,7 @@ public class TransCodingService {
             String infileName = Uuids.getUUID()+uploadFile.getFile().getOriginalFilename().substring(uploadFile.getFile().getOriginalFilename().lastIndexOf("."));
             //
             File inFile = new File(uploadRootDir+inDir+infileName);
-            log.debug(">>>>>infilename>>"+infileName );
+            log.debug(">>>>>infilename>>"+inFile.getAbsolutePath() );
 //            //复制文件
             uploadFile.getFile().transferTo(inFile);
 
@@ -144,7 +144,7 @@ public class TransCodingService {
         return transCodingMapper.findAllVideos();
     }
 
-    public List<Videos> findVideos() {
+    public List<VideoLook> findVideos() {
         return transCodingMapper.findVideos();
     }
 
