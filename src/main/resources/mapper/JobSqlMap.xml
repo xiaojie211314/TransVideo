@@ -27,7 +27,7 @@
         select * from video_job order by id desc
     </select>
 
-    <select id="findVideos" resultType="com.soocedu.video.bean.Videos">
+    <select id="findVideos" resultType="com.soocedu.video.bean.VideoLook">
         select * from video_job order by id desc
     </select>
 
