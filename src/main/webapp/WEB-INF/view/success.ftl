@@ -25,8 +25,8 @@
             <td>${data.status }</td>
             <td>${data.counts }</td>
             <td>${data.msg }</td>
-            <td>${data.callmsg }</td>
-            <td>${data.videokey }</td>
+            <td>${data.error }</td>
+            <td>${data.persistentid }</td>
 
 
         </tr>
