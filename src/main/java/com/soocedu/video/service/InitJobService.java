@@ -1,9 +1,9 @@
 package com.soocedu.video.service;
 
-import com.soocedu.video.bean.VideoJob;
-import com.soocedu.video.dao.TransCodingMapper;
 import com.soocedu.httpclient.HttpclientUtil;
 import com.soocedu.task.TransCodeTask;
+import com.soocedu.video.bean.VideoJob;
+import com.soocedu.video.dao.TransCodingMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
