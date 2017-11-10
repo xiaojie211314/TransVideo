@@ -89,6 +89,9 @@ public class TransCodingService {
             }
 
 
+            //设置视频的唯一 key
+            uploadResult.setPersistentId( Uuids.getUUID());
+
             //上传视频
             VideoJob videoJob = new VideoJob();
             videoJob.setPersistentNotifyUrl(uploadFile.getPersistentNotifyUrl());
