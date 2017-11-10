@@ -2,6 +2,7 @@ package com.soocedu.video.dao;
 
 
 import com.soocedu.video.bean.VideoJob;
+import com.soocedu.video.bean.Videos;
 
 import java.util.List;
 
@@ -27,6 +28,8 @@ public interface TransCodingMapper {
 
 
     List<VideoJob> findAllVideos();
+
+    List<Videos> findVideos();
 
 
     /**
