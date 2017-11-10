@@ -45,7 +45,7 @@ public class TransCodeTask implements Runnable {
             log.debug("通知客户端,转码成功 .....");
         } else{
             // 1 修改数据库转码失败状态
-            log.debug("转码失败,修改数据库状态为>>>> 2 .... ");
+            log.debug("转码失败,修改数据库状态为>>>> 3 .... ");
             videoJob.setStatus(3);
             transCodingMapper.updateJob(videoJob);
             // 2 告知数据库转码失败.
@@ -79,14 +79,16 @@ public class TransCodeTask implements Runnable {
             videoCall.setError("转码失败");
         }
 
-        String result = httpclientUtil.post(videoJob.getPersistentNotifyUrl(),videoJob);
+        String result = httpclientUtil.post(videoJob.getPersistentNotifyUrl(),videoCall);
 
+        log.debug("回调结果 result >>>>>  "+result);
         if(result!=null){
-            videoJob.setError("回调服务器成功！");
+            videoJob.setError("回调成功 【 "+result+" 】");
             transCodingMapper.updateJob(videoJob);
         }else {
+            //回调失败
             videoJob.setStatus(4);
-            videoJob.setError("回调服务器失败！");
+            videoJob.setError("回调失败 【 "+result+" 】");
             transCodingMapper.updateJob(videoJob);
         }
     }

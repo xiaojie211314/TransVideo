@@ -4,11 +4,11 @@
 
 
     <insert id="insertJob" useGeneratedKeys="true" keyProperty="id">
-        insert into video_job(filename,srcpath,despath,srcurl,desurl,status,counts,persistentid,inputtime)values(#{filename},#{srcpath},#{despath},#{srcurl},#{desurl},#{status},#{counts},#{persistentid},#{inputtime})
+        insert into video_job(filename,srcpath,despath,srcurl,desurl,status,counts,persistentid,inputtime)values(#{filename},#{srcpath},#{despath},#{srcurl},#{desurl},#{status},#{counts},#{persistentid},unix_timestamp())
     </insert>
 
     <update id="updateJob">
-        update video_job set despath = #{despath}, desurl=#{desurl}, counts=#{counts},command=#{command}, msg=#{msg}, updatetime=#{updatetime}, status=#{status}, error=#{error} where id=#{id}
+        update video_job set despath = #{despath}, desurl=#{desurl}, counts=#{counts},command=#{command}, msg=#{msg}, updatetime=unix_timestamp(), status=#{status}, error=#{error} where id=#{id}
     </update>
 
 
@@ -28,7 +28,7 @@
     </select>
 
     <select id="findVideos" resultType="com.soocedu.video.bean.VideoLook">
-        select * from video_job order by id desc
+        select * , status as code from video_job order by id desc
     </select>
 
 

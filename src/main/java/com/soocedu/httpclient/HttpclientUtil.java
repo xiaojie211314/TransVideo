@@ -1,7 +1,7 @@
 package com.soocedu.httpclient;
 
 import com.alibaba.fastjson.JSON;
-import com.soocedu.video.bean.VideoJob;
+import com.soocedu.video.bean.VideoCall;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -34,9 +34,9 @@ public class HttpclientUtil {
     {
         return doGet(url);
     }
-    public String post(String url, VideoJob videoJob)
+    public String post(String url, VideoCall videoCall)
     {
-        return doPost(url,videoJob);
+        return doPost(url,videoCall);
     }
 
     private String doGet(String url) {
@@ -55,10 +55,10 @@ public class HttpclientUtil {
         return null;
     }
 
-    private String doPost(String url,VideoJob videoJob) {
+    private String doPost(String url, VideoCall videoCall) {
         try {
             HttpPost httpPost = new HttpPost(url);
-            httpPost.setEntity(new StringEntity(JSON.toJSONString(videoJob)));
+            httpPost.setEntity(new StringEntity(JSON.toJSONString(videoCall)));
             HttpResponse response = httpClient.execute(httpPost);
             HttpEntity entity = response.getEntity();
             if (entity != null) {

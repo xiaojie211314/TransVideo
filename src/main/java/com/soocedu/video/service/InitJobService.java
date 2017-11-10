@@ -34,9 +34,9 @@ public class InitJobService {
 
 
     private String uploadRootDir;//根目录
-    private String inDir;//上传目录
+    private String imgInDir;//图片上传目录
+    private String videoInDir;//视频上传目录
     private String outDir;//转码输出目录
-
 
     @PostConstruct
     public void init(){
@@ -57,24 +57,37 @@ public class InitJobService {
     }
 
     private void creatUploadDir(){
-        File uploadFile = new File(uploadRootDir+inDir);
-        if(!uploadFile.exists()){
-            uploadFile.mkdirs();
+        //图片上传目录
+        File file = new File(uploadRootDir+ imgInDir);
+        if(!file.exists()){
+            file.mkdirs();
         }
 
-        File outFile = new File(uploadRootDir+outDir);
-        if(!outFile.exists()){
-            outFile.mkdirs();
+        //视频上传目录
+        file = new File(uploadRootDir+videoInDir);
+        if(!file.exists()){
+            file.mkdirs();
+        }
+
+
+        //转码目录
+        file = new File(uploadRootDir+outDir);
+        if(!file.exists()){
+            file.mkdirs();
         }
     }
 
 
+
+    @Value("${img.in.srcpath}")
+    public void setImgInDir(String imgInDir) {
+        this.imgInDir = imgInDir;
+    }
 
     @Value("${video.in.srcpath}")
-    public void setInDir(String inDir) {
-        this.inDir = inDir;
+    public void setVideoInDir(String videoInDir) {
+        this.videoInDir = videoInDir;
     }
-
 
     @Value("${video.out.despath}")
     public void setOutDir(String outDir) {
