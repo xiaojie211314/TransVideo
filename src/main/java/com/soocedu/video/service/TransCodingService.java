@@ -5,6 +5,7 @@ import com.soocedu.util.Const;
 import com.soocedu.video.bean.UploadFile;
 import com.soocedu.video.bean.VideoResult;
 import com.soocedu.video.bean.VideoJob;
+import com.soocedu.video.bean.Videos;
 import com.soocedu.video.dao.TransCodingMapper;
 import com.soocedu.httpclient.HttpclientUtil;
 import com.soocedu.task.TransCodeTask;
@@ -141,6 +142,10 @@ public class TransCodingService {
     public List<VideoJob> findListVideos(){
 
         return transCodingMapper.findAllVideos();
+    }
+
+    public List<Videos> findVideos() {
+        return transCodingMapper.findVideos();
     }
 
     /**
