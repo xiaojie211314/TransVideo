@@ -4,7 +4,7 @@ package com.soocedu.video.controller;/**
 
 import com.soocedu.video.bean.VideoJob;
 import com.soocedu.video.bean.VideoResult;
-import com.soocedu.video.bean.Videos;
+import com.soocedu.video.bean.VideoLook;
 import com.soocedu.httpclient.HttpclientUtil;
 import com.soocedu.video.service.TransCodingService;
 import org.slf4j.Logger;
@@ -61,9 +61,9 @@ public class TransCodingController {
     }
     @RequestMapping("look")
     @ResponseBody
-    public List<Videos> success(){
+    public List<VideoLook> success(){
 
-        List<Videos>  videoJobList = transCodingService.findVideos();
+        List<VideoLook>  videoJobList = transCodingService.findVideos();
 //        ModelAndView modelAndView = new ModelAndView("success");
 //
 //        //将数据放到request中
