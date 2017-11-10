@@ -3,14 +3,14 @@ package com.soocedu.video.bean;
 import lombok.Data;
 
 /**
- * TODO 简单描述该类的实现功能（可选）.
+ * 查询给用户看的数据
  * <p>
  * Date:     2017/10/12
  *
  * @author lj
  */
 @Data
-public class Videos {
+public class VideoLook {
     private int id;//主键
     private String filename;//文件名
     private String srcurl;//视频源上传地址(相对路径)
@@ -27,7 +27,7 @@ public class Videos {
 
 
 
-    public Videos() {
+    public VideoLook() {
     }
 
     public int getId() {
