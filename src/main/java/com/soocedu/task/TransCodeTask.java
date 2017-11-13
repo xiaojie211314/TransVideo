@@ -119,7 +119,7 @@ public class TransCodeTask implements Runnable {
          */
 
 
-        String transferMp4 = "ffmpeg -i  " + infile + " -s " + videoJob.getWidth() + "x" + videoJob.getHeight() + "  -c:v libx264  -g 10  -b:v 600k -bufsize 512k  -b:a 64k -r 25 -f mp4 -y " + outfile;
+        String transferMp4 = "ffmpeg -i  " + infile + " -s " + videoJob.getWidth() + "x" + videoJob.getHeight() + "  -c:v libx264  -g 10  -b:v "+videoJob.getMrate()+"   -b:a 64k -r 25 -f mp4 -y " + outfile;
 
 
         //正在转码中

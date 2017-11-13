@@ -12,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,13 +35,11 @@ public class TransCodingService {
     @Resource(name = "taskExecutor")
     private TaskExecutor taskExecutor;
 
+    @Autowired
+    private VideoDir videoDir;//视频目录
 
-    private String uploadRootDir;
-    private String imgInDir;
-    private String videoInDir;
-    private String outDir;
-
-
+    @Autowired
+    private VideoJob videoJob;//视频任务
     //上传
     public VideoResult upload(MultipartFile file, @RequestParam("token") String token) {
 
@@ -74,14 +71,14 @@ public class TransCodingService {
             //图片上传 名称
             if (StringUtils.isEmpty(uploadFile.getPersistentOps())) {
 
-                infileName = imgInDir + infileName;
+                infileName = videoDir.getImgInDir() + infileName;
             } else {
                 //视频上传相对路径
-                infileName = videoInDir + infileName;
+                infileName = videoDir.getVideoInDir() + infileName;
             }
 
 
-            File inFile = new File(uploadRootDir + infileName);
+            File inFile = new File(videoDir.getUploadRootDir() + infileName);
 
 
             log.debug(">>>>>infilename>>" + inFile.getAbsolutePath());
@@ -104,7 +101,6 @@ public class TransCodingService {
             uploadResult.setPersistentId(Uuids.getUUID());
 
             //上传视频
-            VideoJob videoJob = new VideoJob();
             videoJob.setPersistentNotifyUrl(uploadFile.getPersistentNotifyUrl());
             videoJob.setFilename(uploadFile.getOutkey());
             videoJob.setSrcpath(inFile.getAbsolutePath());
@@ -114,8 +110,8 @@ public class TransCodingService {
             videoJob.setPersistentid(uploadResult.getPersistentId());
 //
 
-            videoJob.setDespath(uploadRootDir + outDir + uploadFile.getOutkey());
-            videoJob.setDesurl(outDir + uploadFile.getOutkey());
+            videoJob.setDespath(videoDir.getUploadRootDir() + videoDir.getOutDir() + uploadFile.getOutkey());
+            videoJob.setDesurl(videoDir.getOutDir() + uploadFile.getOutkey());
 
 //
 //
@@ -174,23 +170,5 @@ public class TransCodingService {
         return videoCall;
     }
 
-    @Value("${img.in.srcpath}")
-    public void setImgInDir(String imgInDir) {
-        this.imgInDir = imgInDir;
-    }
 
-    @Value("${video.in.srcpath}")
-    public void setVideoInDir(String videoInDir) {
-        this.videoInDir = videoInDir;
-    }
-
-    @Value("${video.out.despath}")
-    public void setOutDir(String outDir) {
-        this.outDir = outDir;
-    }
-
-    @Value("${video.upload.root}")
-    public void setUploadRootDir(String uploadRootDir) {
-        this.uploadRootDir = uploadRootDir;
-    }
 }
