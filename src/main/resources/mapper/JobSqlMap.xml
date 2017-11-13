@@ -14,18 +14,14 @@
 
     <!--查找未执行的任务-->
     <select id="findJobTask" resultType="com.soocedu.video.bean.VideoJob">
-        select id,filename,command,srcpath,despath,srcurl,desurl,status,counts,msg,error,persistentid from video_job where status= 0 or  status=1 or (counts in (1,2) and status=3)
+        select id,filename,command,srcpath,despath,srcurl,desurl,status,counts,msg,error,persistentid from video_job where status= 1 or  status=2  or (counts in (1,2) and status=3)
     </select>
 
-    <!--根据 videokey 查询视频-->
-    <select id="findyVideoByVideokey" resultType="com.soocedu.video.bean.VideoJob" >
-        select id,filename,command,srcpath,despath,srcurl,desurl,status,counts,msg,error,persistentid from video_job where persistentid=#{persistentid}
+    <!--根据 persistentId 查询视频-->
+    <select id="findVideoByPersistentId" resultType="com.soocedu.video.bean.VideoJob" >
+        select id,filename,command,srcpath,despath,srcurl,desurl,status,counts,msg,error,persistentid from video_job where persistentid=#{persistentId}
     </select>
 
-
-    <select id="findAllVideos" resultType="com.soocedu.video.bean.VideoJob">
-        select * from video_job order by id desc
-    </select>
 
     <select id="findVideos" resultType="com.soocedu.video.bean.VideoLook">
         select * , status as code from video_job order by id desc

@@ -27,17 +27,19 @@ public interface TransCodingMapper {
     List<VideoJob> findJobTask();
 
 
-    List<VideoJob> findAllVideos();
-
+    /**
+     * 查询所有的视频任务
+     * @return
+     */
     List<VideoLook> findVideos();
 
 
     /**
-     * 根据 videokey 查询视频
-     * @param videokey
+     * 根据 persistentId 查询视频
+     * @param persistentId
      * @return
      */
-    VideoJob findyVideoByVideokey(String videokey);
+    VideoJob findVideoByPersistentId(String persistentId);
 
 
 }

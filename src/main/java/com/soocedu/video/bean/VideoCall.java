@@ -1,5 +1,7 @@
 package com.soocedu.video.bean;
 
+import java.util.List;
+
 /**
  * 视频回调 model
  * Created by jieli on 2017/11/9.
@@ -9,7 +11,7 @@ public class VideoCall extends  BaseBean{
 
     private String desc;//视频转码说明
 
-    private VideoResult items;
+    private List<VideoResult> items;
 
 
     public String getId() {
@@ -28,11 +30,11 @@ public class VideoCall extends  BaseBean{
         this.desc = desc;
     }
 
-    public VideoResult getItems() {
+    public List<VideoResult> getItems() {
         return items;
     }
 
-    public void setItems(VideoResult items) {
+    public void setItems(List<VideoResult> items) {
         this.items = items;
     }
 }

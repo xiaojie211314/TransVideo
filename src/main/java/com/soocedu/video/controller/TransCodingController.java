@@ -2,10 +2,10 @@ package com.soocedu.video.controller;/**
  * Created by Administrator on 2017/6/19 0019.
  */
 
-import com.soocedu.video.bean.VideoJob;
-import com.soocedu.video.bean.VideoResult;
-import com.soocedu.video.bean.VideoLook;
 import com.soocedu.httpclient.HttpclientUtil;
+import com.soocedu.video.bean.VideoCall;
+import com.soocedu.video.bean.VideoLook;
+import com.soocedu.video.bean.VideoResult;
 import com.soocedu.video.service.TransCodingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ import java.util.List;
  */
 @CrossOrigin
 @Controller
-@RequestMapping("video")
+@RequestMapping("/")
 public class TransCodingController {
     private Logger log = LoggerFactory.getLogger(TransCodingController.class);
     @Autowired
@@ -53,11 +53,10 @@ public class TransCodingController {
 
     }
 
-    @RequestMapping("getVideo")
+    @RequestMapping("status/get/prefop")
     @ResponseBody
-    public VideoJob getVideo(String videokey){
-
-        return  transCodingService.findVideoByVideokey(videokey);
+    public VideoCall getVideo(@RequestParam("id") String id){
+        return transCodingService.findVideoByPersistentId(id);
     }
     @RequestMapping("look")
     @ResponseBody

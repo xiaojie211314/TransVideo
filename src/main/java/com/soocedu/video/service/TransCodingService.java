@@ -6,10 +6,7 @@ import com.soocedu.task.TransCodeTask;
 import com.soocedu.util.Const;
 import com.soocedu.util.Token;
 import com.soocedu.util.Uuids;
-import com.soocedu.video.bean.UploadFile;
-import com.soocedu.video.bean.VideoJob;
-import com.soocedu.video.bean.VideoLook;
-import com.soocedu.video.bean.VideoResult;
+import com.soocedu.video.bean.*;
 import com.soocedu.video.dao.TransCodingMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -23,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -111,8 +109,8 @@ public class TransCodingService {
             videoJob.setFilename(uploadFile.getOutkey());
             videoJob.setSrcpath(inFile.getAbsolutePath());
             videoJob.setSrcurl(uploadResult.getKey());
-            videoJob.setStatus(0);
-            videoJob.setCounts(0);
+            videoJob.setStatus(1);//等待转码
+            videoJob.setCounts(1);
             videoJob.setPersistentid(uploadResult.getPersistentId());
 //
 
@@ -150,24 +148,30 @@ public class TransCodingService {
     }
 
 
-    public List<VideoJob> findListVideos() {
-
-        return transCodingMapper.findAllVideos();
-    }
 
     public List<VideoLook> findVideos() {
         return transCodingMapper.findVideos();
     }
 
     /**
-     * 根据 videokey 查询视频
+     * 根据 persistentId 查询视频
      *
-     * @param videokey
+     * @param persistentId
      * @return
      */
 
-    public VideoJob findVideoByVideokey(String videokey) {
-        return transCodingMapper.findyVideoByVideokey(videokey);
+    public VideoCall findVideoByPersistentId(String persistentId) {
+        VideoJob videoJob = transCodingMapper.findVideoByPersistentId(persistentId);
+        VideoCall videoCall = new VideoCall();
+        videoCall.setCode(videoJob.getStatus());
+        videoCall.setError(videoJob.getError());
+        videoCall.setId(videoJob.getPersistentid());
+        videoCall.setDesc(videoJob.getMsg());
+        List<VideoResult> listItems = new ArrayList<>();
+        listItems.add(new VideoResult(videoJob.getDesurl()));
+        videoCall.setItems(listItems);
+
+        return videoCall;
     }
 
     @Value("${img.in.srcpath}")

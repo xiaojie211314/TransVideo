@@ -1,16 +1,18 @@
 package com.soocedu.task;
 
+import com.soocedu.httpclient.HttpclientUtil;
 import com.soocedu.video.bean.VideoCall;
 import com.soocedu.video.bean.VideoJob;
 import com.soocedu.video.bean.VideoResult;
 import com.soocedu.video.dao.TransCodingMapper;
-import com.soocedu.httpclient.HttpclientUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransCodeTask implements Runnable {
     private Logger log = LoggerFactory.getLogger(TransCodeTask.class);
@@ -21,9 +23,7 @@ public class TransCodeTask implements Runnable {
     private VideoJob videoJob;
 
 
-
-    public TransCodeTask( TransCodingMapper transCodingMapper,VideoJob videoJob, HttpclientUtil httpclientUtil) {
-
+    public TransCodeTask(TransCodingMapper transCodingMapper, VideoJob videoJob, HttpclientUtil httpclientUtil) {
 
 
         this.videoJob = videoJob;
@@ -34,16 +34,16 @@ public class TransCodeTask implements Runnable {
     @Override
     public void run() {
 
-        if(transfer(videoJob.getSrcpath(), videoJob.getDespath())){
-            //1 修改数据库成功状态 0 表示正在转码队列中, 1 表示转码成功  2 表示转码失败
+        if (transfer(videoJob.getSrcpath(), videoJob.getDespath())) {
+            //1 修改数据库成功状态 , 0 表示转码成功 1 表示正在转码队列中  2 转码进行中  3 表示转码失败
             log.debug("转码成功,修改数据库状态为>>>> 1 .... ");
 
-            videoJob.setStatus(2);
+            videoJob.setStatus(0);
             videoJob.setMsg("转码成功");
             transCodingMapper.updateJob(videoJob);
             //像客户端发送消息,告知转码成功
             log.debug("通知客户端,转码成功 .....");
-        } else{
+        } else {
             // 1 修改数据库转码失败状态
             log.debug("转码失败,修改数据库状态为>>>> 3 .... ");
             videoJob.setStatus(3);
@@ -53,49 +53,47 @@ public class TransCodeTask implements Runnable {
             //通知失败如何处理
 
 
-
         }
 
         //回调 php
         callVideo(videoJob);
 
 
-
     }
 
 
-
-    private void  callVideo(VideoJob videoJob){
+    private void callVideo(VideoJob videoJob) {
 
         VideoCall videoCall = new VideoCall();
 
         videoCall.setId(videoJob.getPersistentid());
-        videoCall.setDesc("转码文件名称【"+videoJob.getFilename()+"】| 转码文件路径【"+videoJob.getDesurl()+"】");
-        videoCall.setItems(new VideoResult(videoJob.getDesurl()));
+        videoCall.setDesc("转码文件名称【" + videoJob.getFilename() + "】| 转码文件路径【" + videoJob.getDesurl() + "】");
+        List<VideoResult> videoResults = new ArrayList<>();
+        videoResults.add(new VideoResult(videoJob.getDesurl()));
+        videoCall.setItems(videoResults);
         videoCall.setCode(videoJob.getStatus());
-        if(videoJob.getStatus()==0){
+        if (videoJob.getStatus() == 0) {
             videoCall.setError("转码成功");
-        }else{
+        } else {
             videoCall.setError("转码失败");
         }
 
-        String result = httpclientUtil.post(videoJob.getPersistentNotifyUrl(),videoCall);
+        String result = httpclientUtil.post(videoJob.getPersistentNotifyUrl(), videoCall);
 
-        log.debug("回调结果 result >>>>>  "+result);
-        if(result!=null){
-            videoJob.setError("回调成功 【 "+result+" 】");
+        log.debug("回调结果 result >>>>>  " + result);
+        if (result != null) {
+            videoJob.setError("回调成功 【 " + result + " 】");
             transCodingMapper.updateJob(videoJob);
-        }else {
+        } else {
             //回调失败
             videoJob.setStatus(4);
-            videoJob.setError("回调失败 【 "+result+" 】");
+            videoJob.setError("回调失败 【 " + result + " 】");
             transCodingMapper.updateJob(videoJob);
         }
     }
 
 
-
-    public boolean transfer(String infile,String outfile) {
+    public boolean transfer(String infile, String outfile) {
 
 
         /** -i  输入视频地址
@@ -121,13 +119,13 @@ public class TransCodeTask implements Runnable {
          */
 
 
-        String transferMp4 = "ffmpeg -i  " + infile + " -s "+ videoJob.getWidth()+"x"+videoJob.getHeight()+"  -c:v libx264  -g 10  -b:v 600k -bufsize 512k  -b:a 64k -r 25 -f mp4 -y " + outfile;
+        String transferMp4 = "ffmpeg -i  " + infile + " -s " + videoJob.getWidth() + "x" + videoJob.getHeight() + "  -c:v libx264  -g 10  -b:v 600k -bufsize 512k  -b:a 64k -r 25 -f mp4 -y " + outfile;
 
 
         //正在转码中
-        videoJob.setStatus(1);
+        videoJob.setStatus(2);
 
-        videoJob.setCounts(videoJob.getCounts()+1);
+        videoJob.setCounts(videoJob.getCounts());
 
         videoJob.setCommand(transferMp4);
 
@@ -140,22 +138,22 @@ public class TransCodeTask implements Runnable {
             BufferedReader br = new BufferedReader(isr);
             String line = null;
 
-            while ( (line = br.readLine()) != null) {
-              log.debug(line);
+            while ((line = br.readLine()) != null) {
+                log.debug(line);
 //                int exitVal = proc.waitFor();
 //                System.out.println("Success Process exitValue: " + exitVal);
             }
 
             int exitVal = proc.waitFor();
             log.debug("Success Process exitValue: " + exitVal);
-            if(exitVal==0){
+            if (exitVal == 0) {
                 return true;
-            }else {
-               log.debug("转码失败,重新转码....");
+            } else {
+                log.debug("转码失败,重新转码....");
                 //获取转码次数
                 int counts = videoJob.getCounts();
-                if(counts<3) {
-//                    videoJob.setCounts(videoJob.getCounts() + 1);
+                if (counts < 3) {
+                    videoJob.setCounts(videoJob.getCounts() + 1);
                     transfer(videoJob.getSrcpath(), videoJob.getDespath());
                 }
 
@@ -166,19 +164,18 @@ public class TransCodeTask implements Runnable {
 
         } catch (Throwable t) {
             //判断转码次数是否大于三次  如果小于3次 重新转码
-           log.error("转码失败,重新转码....",t.getCause());
+            log.error("转码失败,重新转码....", t.getCause());
 
             //获取转码次数
             int counts = videoJob.getCounts();
-            if(counts<3) {
-//                    videoJob.setCounts(videoJob.getCounts() + 1);
+            if (counts < 3) {
+                videoJob.setCounts(videoJob.getCounts() + 1);
                 transfer(videoJob.getSrcpath(), videoJob.getDespath());
             }
-            videoJob.setMsg("抛出异常："+t.getMessage());
+            videoJob.setMsg("抛出异常：" + t.getMessage());
             return false;
         }
     }
-
 
 
 }
