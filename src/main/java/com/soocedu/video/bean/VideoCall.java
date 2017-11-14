@@ -6,6 +6,7 @@ import java.util.List;
  * 视频回调 model
  * Created by jieli on 2017/11/9.
  */
+
 public class VideoCall extends  BaseBean{
     private String id;//视频唯一值
 

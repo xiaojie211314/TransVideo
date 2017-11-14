@@ -27,7 +27,7 @@ public class Token {
         String[] result = token.split(":");
         this.accessKey = result[0];
         this.encodedSign = result[1];
-        this.encodedPutPolicy = result[2];
+        this.encodedPutPolicy = "eyJzY29wZSI6InRlc3QiLCJkZWFkbGluZSI6MTUxMDU2NDg2NCwicGVyc2lzdGVudE9wcyI6ImF2dGh1bWJcL21wNFwvYWJcLzY0a1wvYXJcLzQ4MDAwXC9hY29kZWNcL2xpYmZhYWNcL3JcLzI1XC92YlwvNjAwa1wvdmNvZGVjXC9saWJ4MjY0XC9zXC8xMjgweDcyMFwvYXV0b3NjYWxlXC8xXC9zdHJpcG1ldGFcLzB8c2F2ZWFzXC9kR1Z6ZERveU1ERTNNVEV4TTE5eGJqVmhNRGsxTldZd05HUXlPRFpmTUM1dGNEUT0iLCJwZXJzaXN0ZW50UGlwZWxpbmUiOiJ0ZXN0IiwicGVyc2lzdGVudE5vdGlmeVVybCI6Imh0dHA6XC9cL3Rlc3RhLnNvb2MuY29tXC9pbmRleC5waHA_cz1hcGlcL1YxXC9GaWxlXC9wZXJzaXN0ZW50Tm90aWZ5VXJsIiwiZnNpemVMaW1pdCI6MTcxNzk4NjkxODR9";//result[2];
     }
 
     /**
@@ -39,14 +39,16 @@ public class Token {
         JSONObject jsonObject = JSON.parseObject(res);
         if (jsonObject.containsKey("persistentOps")) {
             //如果是视频转码，处理视频转码中的Saveas方法
-            String persitentStr = jsonObject.getString("persistentOps").split(";")[0];
+            String persistentOps = jsonObject.getString("persistentOps").split(";")[0];
 
             //包含 saveas
+            if (persistentOps.contains("saveas")) {
 
-            if (persitentStr.contains("saveas")) {
+                //设置视频参数
+                jsonObject.put("voptions",fomatOptions(persistentOps.split("\\|")[0]));
 
                 //如果有saveas 的方法,从saveas中获取转码之后的文件名
-                String[] saveas = new String(UrlSafeBase64.decode(persitentStr.split("\\|")[1].replace("saveas/", "")))
+                String[] saveas = new String(UrlSafeBase64.decode(persistentOps.split("\\|")[1].replace("saveas/", "")))
                         .split(":");
                 if (saveas.length == 2) {
                     jsonObject.put("outkey", saveas[1]);
@@ -74,6 +76,22 @@ public class Token {
         }
         String encodedSign = UrlSafeBase64.encodeToString(sign);
         return encodedSign.equals(this.encodedSign) && accessKey.equals(this.accessKey);
+    }
+
+
+    /**
+     * 格式化视频参数
+     * @param vOptions
+     * @return
+     */
+    private JSONObject fomatOptions(String vOptions){
+        String[] voptArray = vOptions.split("/");
+        JSONObject optJson = new JSONObject();
+        for(int i=0; i<voptArray.length;i++){
+            optJson.put(voptArray[i],voptArray[++i]);
+        }
+
+        return  optJson;
     }
 
 }

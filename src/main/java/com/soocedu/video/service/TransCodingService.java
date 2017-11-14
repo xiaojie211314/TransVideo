@@ -38,11 +38,10 @@ public class TransCodingService {
     @Autowired
     private VideoDir videoDir;//视频目录
 
-    @Autowired
     private VideoJob videoJob;//视频任务
     //上传
     public VideoResult upload(MultipartFile file, @RequestParam("token") String token) {
-
+        videoJob = new VideoJob();
         VideoResult uploadResult = new VideoResult();
         try {
 
@@ -101,6 +100,7 @@ public class TransCodingService {
             uploadResult.setPersistentId(Uuids.getUUID());
 
             //上传视频
+            videoJob.setVoptions(uploadFile.getVoptions());
             videoJob.setPersistentNotifyUrl(uploadFile.getPersistentNotifyUrl());
             videoJob.setFilename(uploadFile.getOutkey());
             videoJob.setSrcpath(inFile.getAbsolutePath());

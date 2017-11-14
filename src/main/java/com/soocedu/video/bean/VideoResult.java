@@ -5,6 +5,7 @@ import com.soocedu.util.Uuids;
 /**
  * Created by jieli on 2017/10/26.
  */
+
 public class VideoResult extends BaseBean {
     private String key="";//上传返回文件相对路径
     private String hash = Uuids.getUUID();// hash值

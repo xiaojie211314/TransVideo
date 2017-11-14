@@ -1,8 +1,6 @@
 package com.soocedu.video.bean;
 
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 /**
  * TODO 简单描述该类的实现功能（可选）.
@@ -12,7 +10,6 @@ import org.springframework.stereotype.Component;
  * @author lj
  */
 @Data
-@Component("VideoJob")
 public class VideoJob {
     private int id;//主键
     private String filename="";//文件名
@@ -35,169 +32,7 @@ public class VideoJob {
 
     //附加
     private String sign;//接口安全通信钥匙
-    @Value("${video.width}")
-    private String width;//分辨率宽度 默认640
-    @Value("${video.height}")
-    private String height;// 分辨率高度,默认480
-    @Value("${video.mrate}")
-    private String mrate;//视频码率
 
+    private Voptions voptions;//视频格式参数
 
-    public VideoJob() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    public String getCommand() {
-        return command;
-    }
-
-    public void setCommand(String command) {
-        this.command = command;
-    }
-
-    public String getSrcpath() {
-        return srcpath;
-    }
-
-    public void setSrcpath(String srcpath) {
-        this.srcpath = srcpath;
-    }
-
-    public String getDespath() {
-        return despath;
-    }
-
-    public void setDespath(String despath) {
-        this.despath = despath;
-    }
-
-    public String getSrcurl() {
-        return srcurl;
-    }
-
-    public void setSrcurl(String srcurl) {
-        this.srcurl = srcurl;
-    }
-
-    public String getDesurl() {
-        return desurl;
-    }
-
-    public void setDesurl(String desurl) {
-        this.desurl = desurl;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public int getCounts() {
-        return counts;
-    }
-
-    public void setCounts(int counts) {
-        this.counts = counts;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-
-    public long getInputtime() {
-        return inputtime;
-    }
-
-    public void setInputtime(long inputtime) {
-        this.inputtime = inputtime;
-    }
-
-    public long getUpdatetime() {
-        return updatetime;
-    }
-
-    public void setUpdatetime(long updatetime) {
-        this.updatetime = updatetime;
-    }
-
-
-
-    public String getSign() {
-        return sign;
-    }
-
-    public void setSign(String sign) {
-        this.sign = sign;
-    }
-
-    public String getWidth() {
-        return width;
-    }
-
-    public void setWidth(String width) {
-        this.width = width;
-    }
-
-    public String getHeight() {
-        return height;
-    }
-
-    public void setHeight(String height) {
-        this.height = height;
-    }
-
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
-
-    public String getPersistentid() {
-        return persistentid;
-    }
-
-    public void setPersistentid(String persistentid) {
-        this.persistentid = persistentid;
-    }
-
-    public String getPersistentNotifyUrl() {
-        return persistentNotifyUrl;
-    }
-
-    public void setPersistentNotifyUrl(String persistentNotifyUrl) {
-        this.persistentNotifyUrl = persistentNotifyUrl;
-    }
-
-    public String getMrate() {
-        return mrate;
-    }
-
-    public void setMrate(String mrate) {
-        this.mrate = mrate;
-    }
 }

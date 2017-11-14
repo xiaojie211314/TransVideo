@@ -5,6 +5,7 @@ import com.soocedu.video.bean.VideoCall;
 import com.soocedu.video.bean.VideoJob;
 import com.soocedu.video.bean.VideoResult;
 import com.soocedu.video.dao.TransCodingMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -119,7 +120,42 @@ public class TransCodeTask implements Runnable {
          */
 
 
-        String transferMp4 = "ffmpeg -i  " + infile + " -s " + videoJob.getWidth() + "x" + videoJob.getHeight() + "  -c:v libx264  -g 10  -b:v "+videoJob.getMrate()+"   -b:a 64k -r 25 -f mp4 -y " + outfile;
+
+        StringBuilder sbCode = new StringBuilder("ffmpeg ");
+        sbCode.append(" -i ").append(infile); //输入文件
+
+        //分辨率
+        if(!StringUtils.isEmpty(videoJob.getVoptions().getS())){
+            sbCode.append(" -s ").append(videoJob.getVoptions().getS());
+        }
+
+        //视频格式 x264
+        if(!StringUtils.isEmpty(videoJob.getVoptions().getVcodec())){
+            sbCode.append(" -vcodec ").append(videoJob.getVoptions().getVcodec());
+        }
+
+        //设置音频采样率
+        if(!StringUtils.isEmpty(videoJob.getVoptions().getAr())){
+            sbCode.append(" -ar ").append(videoJob.getVoptions().getAr());
+        }
+
+        //设置音频码率
+        if(!StringUtils.isEmpty(videoJob.getVoptions().getAb())){
+            sbCode.append(" -ab ").append(videoJob.getVoptions().getAb());
+        }
+
+        //设置视频码率
+        if(!StringUtils.isEmpty(videoJob.getVoptions().getVb())){
+            sbCode.append(" -vb ").append(videoJob.getVoptions().getVb());
+        }
+
+        //设置帧率
+        if(!StringUtils.isEmpty(videoJob.getVoptions().getR())){
+            sbCode.append(" -r ").append(videoJob.getVoptions().getR());
+        }
+
+        sbCode.append(" -g ").append("10"); //关键帧控制
+        sbCode.append(" -y ").append(outfile); //输入文件
 
 
         //正在转码中
@@ -127,12 +163,12 @@ public class TransCodeTask implements Runnable {
 
         videoJob.setCounts(videoJob.getCounts());
 
-        videoJob.setCommand(transferMp4);
+        videoJob.setCommand(sbCode.toString());
 
         transCodingMapper.updateJob(videoJob);
         try {
             Runtime rt = Runtime.getRuntime();
-            Process proc = rt.exec(transferMp4);
+            Process proc = rt.exec(sbCode.toString());
             InputStream stderr = proc.getErrorStream();
             InputStreamReader isr = new InputStreamReader(stderr);
             BufferedReader br = new BufferedReader(isr);

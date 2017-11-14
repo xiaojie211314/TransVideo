@@ -13,36 +13,7 @@ public class UploadFile {
     private String persistentOps; //视频配置参数
     private String persistentNotifyUrl;//转码成功后回调
     private String outkey;//文件转码生成的文件名
+    private Voptions voptions;//视频转码参数
 
-    public MultipartFile getFile() {
-        return file;
-    }
 
-    public void setFile(MultipartFile file) {
-        this.file = file;
-    }
-
-    public String getPersistentOps() {
-        return persistentOps;
-    }
-
-    public void setPersistentOps(String persistentOps) {
-        this.persistentOps = persistentOps;
-    }
-
-    public String getPersistentNotifyUrl() {
-        return persistentNotifyUrl;
-    }
-
-    public void setPersistentNotifyUrl(String persistentNotifyUrl) {
-        this.persistentNotifyUrl = persistentNotifyUrl;
-    }
-
-    public String getOutkey() {
-        return outkey;
-    }
-
-    public void setOutkey(String outkey) {
-        this.outkey = outkey;
-    }
 }
