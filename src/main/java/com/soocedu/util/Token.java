@@ -27,7 +27,7 @@ public class Token {
         String[] result = token.split(":");
         this.accessKey = result[0];
         this.encodedSign = result[1];
-        this.encodedPutPolicy = "eyJzY29wZSI6InRlc3QiLCJkZWFkbGluZSI6MTUxMDU2NDg2NCwicGVyc2lzdGVudE9wcyI6ImF2dGh1bWJcL21wNFwvYWJcLzY0a1wvYXJcLzQ4MDAwXC9hY29kZWNcL2xpYmZhYWNcL3JcLzI1XC92YlwvNjAwa1wvdmNvZGVjXC9saWJ4MjY0XC9zXC8xMjgweDcyMFwvYXV0b3NjYWxlXC8xXC9zdHJpcG1ldGFcLzB8c2F2ZWFzXC9kR1Z6ZERveU1ERTNNVEV4TTE5eGJqVmhNRGsxTldZd05HUXlPRFpmTUM1dGNEUT0iLCJwZXJzaXN0ZW50UGlwZWxpbmUiOiJ0ZXN0IiwicGVyc2lzdGVudE5vdGlmeVVybCI6Imh0dHA6XC9cL3Rlc3RhLnNvb2MuY29tXC9pbmRleC5waHA_cz1hcGlcL1YxXC9GaWxlXC9wZXJzaXN0ZW50Tm90aWZ5VXJsIiwiZnNpemVMaW1pdCI6MTcxNzk4NjkxODR9";//result[2];
+        this.encodedPutPolicy = result[2];
     }
 
     /**
