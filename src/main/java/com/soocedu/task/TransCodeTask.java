@@ -82,15 +82,19 @@ public class TransCodeTask implements Runnable {
         String result = httpclientUtil.post(videoJob.getPersistentNotifyUrl(), videoCall);
 
         log.debug("回调结果 result >>>>>  " + result);
-        if (result != null) {
+        if (!StringUtils.isEmpty(result)) {
             videoJob.setError("回调成功 【 " + result + " 】");
-            transCodingMapper.updateJob(videoJob);
+
         } else {
             //回调失败
-            videoJob.setStatus(4);
+            //如果转码失败的话，回调后不更新状态
+            if (videoJob.getStatus() != 3) {
+                videoJob.setStatus(4);
+            }
             videoJob.setError("回调失败 【 " + result + " 】");
-            transCodingMapper.updateJob(videoJob);
         }
+
+        transCodingMapper.updateJob(videoJob);
     }
 
 
@@ -120,37 +124,36 @@ public class TransCodeTask implements Runnable {
          */
 
 
-
         StringBuilder sbCode = new StringBuilder("ffmpeg ");
         sbCode.append(" -i ").append(infile); //输入文件
 
         //分辨率
-        if(!StringUtils.isEmpty(videoJob.getVoptions().getS())){
+        if (!StringUtils.isEmpty(videoJob.getVoptions().getS())) {
             sbCode.append(" -s ").append(videoJob.getVoptions().getS());
         }
 
         //视频格式 x264
-        if(!StringUtils.isEmpty(videoJob.getVoptions().getVcodec())){
+        if (!StringUtils.isEmpty(videoJob.getVoptions().getVcodec())) {
             sbCode.append(" -vcodec ").append(videoJob.getVoptions().getVcodec());
         }
 
         //设置音频采样率
-        if(!StringUtils.isEmpty(videoJob.getVoptions().getAr())){
+        if (!StringUtils.isEmpty(videoJob.getVoptions().getAr())) {
             sbCode.append(" -ar ").append(videoJob.getVoptions().getAr());
         }
 
         //设置音频码率
-        if(!StringUtils.isEmpty(videoJob.getVoptions().getAb())){
+        if (!StringUtils.isEmpty(videoJob.getVoptions().getAb())) {
             sbCode.append(" -ab ").append(videoJob.getVoptions().getAb());
         }
 
         //设置视频码率
-        if(!StringUtils.isEmpty(videoJob.getVoptions().getVb())){
+        if (!StringUtils.isEmpty(videoJob.getVoptions().getVb())) {
             sbCode.append(" -vb ").append(videoJob.getVoptions().getVb());
         }
 
         //设置帧率
-        if(!StringUtils.isEmpty(videoJob.getVoptions().getR())){
+        if (!StringUtils.isEmpty(videoJob.getVoptions().getR())) {
             sbCode.append(" -r ").append(videoJob.getVoptions().getR());
         }
 
