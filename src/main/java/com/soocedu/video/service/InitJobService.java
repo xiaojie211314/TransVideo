@@ -46,6 +46,8 @@ public class InitJobService {
         if(null != videoJobList && !videoJobList.isEmpty())
             for (VideoJob videoJob: videoJobList){
 
+                videoJob.setStatus(1);
+
                 taskExecutor.execute(new TransCodeTask(transCodingMapper,videoJob,httpclientUtil));
             }
     }

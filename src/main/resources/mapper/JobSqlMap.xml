@@ -14,7 +14,7 @@
 
     <!--查找未执行的任务-->
     <select id="findJobTask" resultType="com.soocedu.video.bean.VideoJob">
-        select id,filename,command,srcpath,despath,srcurl,desurl,status,counts,msg,error,persistentid from video_job where status= 1 or  status=2  or (counts in (1,2) and status=3)
+        select id,filename,command,srcpath,despath,srcurl,desurl,status,counts,msg,error,persistentid from video_job where status= 1 or  status=2  or (counts in (1,2) and status=3) order by inputtime asc
     </select>
 
     <!--根据 persistentId 查询视频-->
