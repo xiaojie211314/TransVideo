@@ -33,7 +33,11 @@ public interface TransCodingMapper {
      */
     List<VideoLook> findVideos();
 
-
+    /**
+     * 查询队列中的任务
+     * @return
+     */
+    List<VideoLook>  findVideosByQueue();
     /**
      * 根据 persistentId 查询视频
      * @param persistentId

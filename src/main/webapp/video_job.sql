@@ -34,6 +34,7 @@ CREATE TABLE `video_job` (
   `persistentid` varchar(100) NOT NULL DEFAULT '' COMMENT '视频唯一值,uuid 格式,用来转码成功后告知服务器更新哪个视频',
   `inputtime` bigint(20) NOT NULL DEFAULT '0' COMMENT '视频插入时间',
   `updatetime` bigint(20) NOT NULL DEFAULT '0' COMMENT '视频更新时间（开始转码，转码成功或转码失败）',
+  `persistentNotifyUrl` varchar(500) NOT NULL DEFAULT '' COMMENT '回调地址 url',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 

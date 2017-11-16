@@ -4,17 +4,17 @@
 
 
     <insert id="insertJob" useGeneratedKeys="true" keyProperty="id">
-        insert into video_job(filename,srcpath,despath,srcurl,desurl,status,counts,persistentid,inputtime)values(#{filename},#{srcpath},#{despath},#{srcurl},#{desurl},#{status},#{counts},#{persistentid},unix_timestamp())
+        insert into video_job(filename,command,srcpath,despath,srcurl,desurl,status,counts,persistentid,persistentNotifyUrl,inputtime)values(#{filename},#{command},#{srcpath},#{despath},#{srcurl},#{desurl},#{status},#{counts},#{persistentid},#{persistentNotifyUrl},unix_timestamp())
     </insert>
 
     <update id="updateJob">
-        update video_job set despath = #{despath}, desurl=#{desurl}, counts=#{counts},command=#{command}, msg=#{msg}, updatetime=unix_timestamp(), status=#{status}, error=#{error} where id=#{id}
+        update video_job set despath = #{despath}, desurl=#{desurl}, counts=#{counts},msg=#{msg}, updatetime=unix_timestamp(), status=#{status}, error=#{error} where id=#{id}
     </update>
 
 
     <!--查找未执行的任务-->
     <select id="findJobTask" resultType="com.soocedu.video.bean.VideoJob">
-        select id,filename,command,srcpath,despath,srcurl,desurl,status,counts,msg,error,persistentid from video_job where status= 1 or  status=2  or (counts in (1,2) and status=3) order by inputtime asc
+        select id,filename,command,srcpath,despath,srcurl,desurl,status,counts,msg,error,persistentid,persistentNotifyUrl from video_job where status= 1 or  status=2  order by id asc
     </select>
 
     <!--根据 persistentId 查询视频-->
@@ -25,6 +25,9 @@
 
     <select id="findVideos" resultType="com.soocedu.video.bean.VideoLook">
         select * , status as code from video_job order by id desc
+    </select>
+    <select id="findVideosByQueue" resultType="com.soocedu.video.bean.VideoLook">
+        select * , status as code from video_job where status= 1 or  status=2  order by id asc
     </select>
 
 

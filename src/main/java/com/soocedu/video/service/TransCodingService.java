@@ -39,6 +39,7 @@ public class TransCodingService {
     private VideoDir videoDir;//视频目录
 
     private VideoJob videoJob;//视频任务
+
     //上传
     public VideoResult upload(MultipartFile file, @RequestParam("token") String token) {
         videoJob = new VideoJob();
@@ -100,6 +101,7 @@ public class TransCodingService {
             uploadResult.setPersistentId(Uuids.getUUID());
 
             //上传视频
+            //视频参数
             videoJob.setVoptions(uploadFile.getVoptions());
             videoJob.setPersistentNotifyUrl(uploadFile.getPersistentNotifyUrl());
             videoJob.setFilename(uploadFile.getOutkey());
@@ -108,13 +110,14 @@ public class TransCodingService {
             videoJob.setStatus(1);//等待转码
             videoJob.setCounts(1);
             videoJob.setPersistentid(uploadResult.getPersistentId());
-//
-
+            //设置转码地址
             videoJob.setDespath(videoDir.getUploadRootDir() + videoDir.getOutDir() + uploadFile.getOutkey());
             videoJob.setDesurl(videoDir.getOutDir() + uploadFile.getOutkey());
 
-//
-//
+            //设置转码命令
+            videoJob = setCmd(videoJob);
+
+
 //            //插入数据库记录
             transCodingMapper.insertJob(videoJob);
 //
@@ -144,10 +147,13 @@ public class TransCodingService {
     }
 
 
-
     public List<VideoLook> findVideos() {
         return transCodingMapper.findVideos();
     }
+    public List<VideoLook> findVideosByQueue() {
+        return transCodingMapper.findVideosByQueue();
+    }
+
 
     /**
      * 根据 persistentId 查询视频
@@ -168,6 +174,50 @@ public class TransCodingService {
         videoCall.setItems(listItems);
 
         return videoCall;
+    }
+
+
+    private VideoJob setCmd(VideoJob videoJob) {
+        //有转码命令 按照转码命令执行，没有转码命令生成转码命令
+        StringBuilder sbCode = new StringBuilder("ffmpeg ");
+        sbCode.append(" -i ").append(videoJob.getSrcpath()); //输入文件
+
+        //分辨率
+        if (!StringUtils.isEmpty(videoJob.getVoptions().getS())) {
+            sbCode.append(" -s ").append(videoJob.getVoptions().getS());
+        }
+
+        //视频格式 x264
+        if (!StringUtils.isEmpty(videoJob.getVoptions().getVcodec())) {
+            sbCode.append(" -vcodec ").append(videoJob.getVoptions().getVcodec());
+        }
+
+        //设置音频采样率
+        if (!StringUtils.isEmpty(videoJob.getVoptions().getAr())) {
+            sbCode.append(" -ar ").append(videoJob.getVoptions().getAr());
+        }
+
+        //设置音频码率
+        if (!StringUtils.isEmpty(videoJob.getVoptions().getAb())) {
+            sbCode.append(" -ab ").append(videoJob.getVoptions().getAb());
+        }
+
+        //设置视频码率
+        if (!StringUtils.isEmpty(videoJob.getVoptions().getVb())) {
+            sbCode.append(" -vb ").append(videoJob.getVoptions().getVb());
+        }
+
+        //设置帧率
+        if (!StringUtils.isEmpty(videoJob.getVoptions().getR())) {
+            sbCode.append(" -r ").append(videoJob.getVoptions().getR());
+        }
+
+        sbCode.append(" -g ").append("10"); //关键帧控制
+        sbCode.append(" -y ").append(videoJob.getDespath()); //输入文件
+
+        videoJob.setCommand(sbCode.toString());
+
+        return videoJob;
     }
 
 

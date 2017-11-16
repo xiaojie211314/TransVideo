@@ -35,7 +35,7 @@ public class TransCodeTask implements Runnable {
     @Override
     public void run() {
 
-        if (transfer(videoJob.getSrcpath(), videoJob.getDespath())) {
+        if (transfer()) {
             //1 修改数据库成功状态 , 0 表示转码成功 1 表示正在转码队列中  2 转码进行中  3 表示转码失败
             log.debug("转码成功,修改数据库状态为>>>> 1 .... ");
 
@@ -98,7 +98,7 @@ public class TransCodeTask implements Runnable {
     }
 
 
-    public boolean transfer(String infile, String outfile) {
+    public boolean transfer() {
 
 
         /** -i  输入视频地址
@@ -124,54 +124,15 @@ public class TransCodeTask implements Runnable {
          */
 
 
-        StringBuilder sbCode = new StringBuilder("ffmpeg ");
-        sbCode.append(" -i ").append(infile); //输入文件
-
-        //分辨率
-        if (!StringUtils.isEmpty(videoJob.getVoptions().getS())) {
-            sbCode.append(" -s ").append(videoJob.getVoptions().getS());
-        }
-
-        //视频格式 x264
-        if (!StringUtils.isEmpty(videoJob.getVoptions().getVcodec())) {
-            sbCode.append(" -vcodec ").append(videoJob.getVoptions().getVcodec());
-        }
-
-        //设置音频采样率
-        if (!StringUtils.isEmpty(videoJob.getVoptions().getAr())) {
-            sbCode.append(" -ar ").append(videoJob.getVoptions().getAr());
-        }
-
-        //设置音频码率
-        if (!StringUtils.isEmpty(videoJob.getVoptions().getAb())) {
-            sbCode.append(" -ab ").append(videoJob.getVoptions().getAb());
-        }
-
-        //设置视频码率
-        if (!StringUtils.isEmpty(videoJob.getVoptions().getVb())) {
-            sbCode.append(" -vb ").append(videoJob.getVoptions().getVb());
-        }
-
-        //设置帧率
-        if (!StringUtils.isEmpty(videoJob.getVoptions().getR())) {
-            sbCode.append(" -r ").append(videoJob.getVoptions().getR());
-        }
-
-        sbCode.append(" -g ").append("10"); //关键帧控制
-        sbCode.append(" -y ").append(outfile); //输入文件
-
-
         //正在转码中
         videoJob.setStatus(2);
 
-        videoJob.setCounts(videoJob.getCounts());
 
-        videoJob.setCommand(sbCode.toString());
 
         transCodingMapper.updateJob(videoJob);
         try {
             Runtime rt = Runtime.getRuntime();
-            Process proc = rt.exec(sbCode.toString());
+            Process proc = rt.exec(videoJob.getCommand());
             InputStream stderr = proc.getErrorStream();
             InputStreamReader isr = new InputStreamReader(stderr);
             BufferedReader br = new BufferedReader(isr);
@@ -193,7 +154,7 @@ public class TransCodeTask implements Runnable {
                 int counts = videoJob.getCounts();
                 if (counts < 3) {
                     videoJob.setCounts(videoJob.getCounts() + 1);
-                    transfer(videoJob.getSrcpath(), videoJob.getDespath());
+                    transfer();
                 }
 
                 videoJob.setMsg("转码命令执行失败！");
@@ -209,7 +170,7 @@ public class TransCodeTask implements Runnable {
             int counts = videoJob.getCounts();
             if (counts < 3) {
                 videoJob.setCounts(videoJob.getCounts() + 1);
-                transfer(videoJob.getSrcpath(), videoJob.getDespath());
+                transfer();
             }
             videoJob.setMsg("抛出异常：" + t.getMessage());
             return false;

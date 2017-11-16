@@ -70,4 +70,17 @@ public class TransCodingController {
 
         return videoJobList;
     }
+
+    @RequestMapping("queue")
+    @ResponseBody
+    public List<VideoLook> queue(){
+
+        List<VideoLook>  videoJobList = transCodingService.findVideosByQueue();
+//        ModelAndView modelAndView = new ModelAndView("success");
+//
+//        //将数据放到request中
+//        modelAndView.addObject("dataList", videoJobList);
+
+        return videoJobList;
+    }
 }
