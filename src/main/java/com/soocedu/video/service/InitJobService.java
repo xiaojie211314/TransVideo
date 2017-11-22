@@ -38,7 +38,7 @@ public class InitJobService {
     @PostConstruct
     public void init(){
 
-        log.info(">>>>>>>>>>查询数据库任务,写到内存....");
+        log.debug(">>>>>>查询转码任务，执行....");
 
         //执行数据库写入内存
         List<VideoJob> videoJobList = transCodingMapper.findJobTask();

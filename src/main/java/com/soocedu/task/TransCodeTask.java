@@ -37,21 +37,19 @@ public class TransCodeTask implements Runnable {
 
         if (transfer()) {
             //1 修改数据库成功状态 , 0 表示转码成功 1 表示正在转码队列中  2 转码进行中  3 表示转码失败
-            log.debug("转码成功,修改数据库状态为>>>> 1 .... ");
 
             videoJob.setStatus(0);
             videoJob.setMsg("转码成功");
             transCodingMapper.updateJob(videoJob);
+            log.debug(">>>>>转码成功 【0】, 转码视频的 persistentid:【"+videoJob.getPersistentid()+"】 ");
+
             //像客户端发送消息,告知转码成功
-            log.debug("通知客户端,转码成功 .....");
         } else {
             // 1 修改数据库转码失败状态
-            log.debug("转码失败,修改数据库状态为>>>> 3 .... ");
             videoJob.setStatus(3);
             transCodingMapper.updateJob(videoJob);
             // 2 告知数据库转码失败.
-            log.debug("通知客户端,转码失败 ....");
-            //通知失败如何处理
+            log.debug(">>>>>转码执行失败【3】 , 转码视频的 persistentid:【"+videoJob.getPersistentid()+"】 ");
 
 
         }
@@ -81,9 +79,9 @@ public class TransCodeTask implements Runnable {
 
         String result = httpclientUtil.post(videoJob.getPersistentNotifyUrl(), videoCall);
 
-        log.debug("回调结果 result >>>>>  " + result);
         if (!StringUtils.isEmpty(result)) {
             videoJob.setError("回调成功 【 " + result + " 】");
+            log.debug(">>>>>回调成功【"+videoJob.getStatus()+"】 ,视频的 persistentid:【"+videoJob.getPersistentid()+"】,");
 
         } else {
             //回调失败
@@ -92,7 +90,11 @@ public class TransCodeTask implements Runnable {
                 videoJob.setStatus(4);
             }
             videoJob.setError("回调失败 【 " + result + " 】");
+
+            log.debug(">>>>>回调失败【"+videoJob.getStatus()+"】 ,视频的 persistentid:【"+videoJob.getPersistentid()+"】,");
+
         }
+
 
         transCodingMapper.updateJob(videoJob);
     }
@@ -127,7 +129,7 @@ public class TransCodeTask implements Runnable {
         //正在转码中
         videoJob.setStatus(2);
 
-
+        log.debug(">>>>>正在转码【2】 , 转码视频的 persistentid:【"+videoJob.getPersistentid()+"】 ");
 
         transCodingMapper.updateJob(videoJob);
         try {
@@ -139,7 +141,7 @@ public class TransCodeTask implements Runnable {
             String line = null;
 
             while ((line = br.readLine()) != null) {
-                log.debug(line);
+                log.debug(">>>>>正在转码【2】, 转码视频的 persistentid:【"+videoJob.getPersistentid()+"】 "+line);
 //                int exitVal = proc.waitFor();
 //                System.out.println("Success Process exitValue: " + exitVal);
             }
@@ -149,11 +151,13 @@ public class TransCodeTask implements Runnable {
             if (exitVal == 0) {
                 return true;
             } else {
-                log.debug("转码失败,重新转码....");
+
                 //获取转码次数
                 int counts = videoJob.getCounts();
                 if (counts < 3) {
                     videoJob.setCounts(videoJob.getCounts() + 1);
+
+                    log.debug(">>>>>转码失败重新转码状态【2】，转码次数【"+videoJob.getCounts()+"】, 转码视频的 persistentid:【"+videoJob.getPersistentid()+"】 ");
                     transfer();
                 }
 
@@ -164,12 +168,14 @@ public class TransCodeTask implements Runnable {
 
         } catch (Throwable t) {
             //判断转码次数是否大于三次  如果小于3次 重新转码
-            log.error("转码失败,重新转码....", t.getCause());
+            log.debug(">>>>>转码异常..",t.getCause());
 
             //获取转码次数
             int counts = videoJob.getCounts();
             if (counts < 3) {
                 videoJob.setCounts(videoJob.getCounts() + 1);
+                log.debug(">>>>>转码失败重新转码状态【2】，转码次数【"+videoJob.getCounts()+"】, 转码视频的 persistentid:【"+videoJob.getPersistentid()+"】 ");
+
                 transfer();
             }
             videoJob.setMsg("抛出异常：" + t.getMessage());

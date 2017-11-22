@@ -92,6 +92,7 @@ public class TransCodingService {
             if (StringUtils.isEmpty(uploadFile.getPersistentOps())) {
                 uploadResult.setCode(0);
                 uploadResult.setError("文件上传成功");
+                log.debug(">>>>上传文档成功，数据返回： 【"+uploadResult.toString()+"】");
 
                 return uploadResult;
             }
@@ -122,7 +123,7 @@ public class TransCodingService {
             transCodingMapper.insertJob(videoJob);
 //
 //
-            log.debug(">>>插入数据库成功 >>>>videoid: " + videoJob.getId());
+            log.debug(">>>插入数据库 ，插入任务成功【1】 >>>>video Persistentid: " + videoJob.getPersistentid());
 //
 //            //转码
             taskExecutor.execute(new TransCodeTask(transCodingMapper, videoJob, httpclientUtil));
@@ -132,16 +133,19 @@ public class TransCodingService {
 ////            transVideo();
 //
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(">>>上传异常 :"+e.getMessage());
 
             uploadResult.setCode(2);
-            uploadResult.setError("上传文件失败");
+            uploadResult.setError("上传失败");
+            log.debug(">>>>上传失败，数据返回： 【"+uploadResult.toString()+"】");
+
             return uploadResult;
         }
 
 
         uploadResult.setCode(0);
         uploadResult.setError("上传文件成功");
+        log.debug(">>>>上传视频文件成功，数据返回： 【"+uploadResult.toString()+"】");
         return uploadResult;
 
     }

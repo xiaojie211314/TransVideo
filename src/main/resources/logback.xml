@@ -6,9 +6,15 @@
 <!-- scanPeriod="30 seconds" : 配置自动扫面时间间隔（单位可以是：milliseconds, seconds, minutes
     or hours，默认为：milliseconds）， 默认为1分钟，scan="true"时该配置才会生效 -->
 <configuration debug="false" scan="true" scanPeriod="30 seconds" packagingData="true">
+    <!--<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">-->
+        <!--<resetJUL>true</resetJUL>-->
+    <!--</contextListener>-->
+    <!-- drop duplicate message -->
+    <turboFilter class="ch.qos.logback.classic.turbo.DuplicateMessageFilter"/>
     <!-- 设置 logger context 名称,一旦设置不可改变，默认为default -->
     <contextName>video</contextName>
-    <property name="log.path.root" value="../logs/videolog" />
+    <property resource="proper.properties" />
+    <!--<property name="log.path.root" value="${catalina.base}/logs/videolog" />-->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoders are by default assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
         <encoder>
@@ -20,19 +26,19 @@
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 当前活动日志文件名 -->
-        <file>${log.path.root}/log.log</file>
+        <file>${video.log}/log.log</file>
 
         <!-- 文件滚动策略根据%d{patter}中的“patter”而定，此处为每天产生一个文件 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 一天一归档文件名“.zip或.gz结尾”,表示归档文件自动压缩 -->
-            <FileNamePattern>${log.path.root}/log_%d{yyyyMMdd}.zip</FileNamePattern>
+            <FileNamePattern>${video.logll}/log_%d{yyyyMMdd}.zip</FileNamePattern>
             <maxHistory>30</maxHistory>
 
         </rollingPolicy>
 
         <!--文件归档log_1-10-->
         <!--<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">-->
-            <!--<fileNamePattern>${log.path.root}/log_%i.log</fileNamePattern>-->
+            <!--<fileNamePattern>${video.log}/log_%i.log</fileNamePattern>-->
             <!--<minIndex>1</minIndex>-->
             <!--<maxIndex>10</maxIndex>-->
         <!--</rollingPolicy>-->
@@ -44,7 +50,7 @@
 
        <!--<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">-->
           <!--&lt;!&ndash;rollover daily&ndash;&gt;-->
-          <!--<fileNamePattern>${log.path.root}/log_%d{yyyyMMddHHmm}.zip</fileNamePattern>-->
+          <!--<fileNamePattern>${video.log}/log_%d{yyyyMMddHHmm}.zip</fileNamePattern>-->
            <!--&lt;!&ndash;each file should be at most 30MB, keep 60 days worth of history, but at most 20GB&ndash;&gt;-->
            <!--<maxFileSize>20MB</maxFileSize>-->
            <!--<maxHistory>30</maxHistory>-->
@@ -61,12 +67,13 @@
 
     <!-- 日志级别若没显示定义，则继承最近的父logger（该logger需显示定义level,直到rootLogger）的日志级别-->
     <!-- logger的appender默认具有累加性（默认日志输出到当前logger的appender和所有祖先logger的appender中），可通过配置 “additivity”属性修改默认行为-->
-    <logger name="com.test" level="debug" additivity="false">
+    <logger name="com.soocedu" level="${video.log.level}" additivity="false">
         <appender-ref ref="FILE"/>
+        <appender-ref ref="STDOUT"/>
     </logger>
 
     <!-- 至多只能配置一个root -->
-    <root level="debug">
+    <root level="${video.log.level}">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </root>
