@@ -44,7 +44,7 @@ public class TransCodingController {
 
 
 
-    @RequestMapping("upload")
+    @RequestMapping(value = "upload",produces="application/json;charset=UTF-8")
     @ResponseBody
     public VideoResult upload(MultipartFile file, @RequestParam("token") String token) {
 
@@ -53,12 +53,14 @@ public class TransCodingController {
 
     }
 
-    @RequestMapping("status/get/prefop")
+    @RequestMapping(value="status/get/prefop",produces="application/json;charset=UTF-8")
     @ResponseBody
     public VideoCall getVideo(@RequestParam("id") String id){
         return transCodingService.findVideoByPersistentId(id);
     }
-    @RequestMapping("look")
+
+
+    @RequestMapping(value="look",produces="application/json;charset=UTF-8")
     @ResponseBody
     public List<VideoLook> success(){
 
@@ -71,7 +73,7 @@ public class TransCodingController {
         return videoJobList;
     }
 
-    @RequestMapping("queue")
+    @RequestMapping(value="queue",produces="application/json;charset=UTF-8")
     @ResponseBody
     public List<VideoLook> queue(){
 
