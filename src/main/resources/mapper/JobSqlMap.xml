@@ -14,7 +14,7 @@
 
     <!--查找未执行的任务-->
     <select id="findJobTask" resultType="com.soocedu.video.bean.VideoJob">
-        select id,filename,command,srcpath,despath,srcurl,desurl,status,counts,msg,error,persistentid,persistentNotifyUrl from video_job where status= 1 or  status=2  order by id asc
+        select id,filename,command,srcpath,despath,srcurl,desurl,status,counts,msg,error,persistentid,persistentNotifyUrl from video_job where status between 1 and 2 order by id asc
     </select>
 
     <!--根据 persistentId 查询视频-->
@@ -27,7 +27,7 @@
         select * , status as code from video_job order by id desc
     </select>
     <select id="findVideosByQueue" resultType="com.soocedu.video.bean.VideoLook">
-        select * , status as code from video_job where status= 1 or  status=2  order by id asc
+        select * , status as code from video_job where status between 1 and 2  order by id asc
     </select>
 
 
