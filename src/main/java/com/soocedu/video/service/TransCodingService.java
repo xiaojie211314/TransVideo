@@ -38,11 +38,10 @@ public class TransCodingService {
     @Autowired
     private VideoDir videoDir;//视频目录
 
-    private VideoJob videoJob;//视频任务
 
     //上传
     public VideoResult upload(MultipartFile file, @RequestParam("token") String token) {
-        videoJob = new VideoJob();
+        VideoJob videoJob = new VideoJob();
         VideoResult uploadResult = new VideoResult();
         try {
 
