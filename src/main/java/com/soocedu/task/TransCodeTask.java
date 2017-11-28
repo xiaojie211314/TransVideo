@@ -141,7 +141,7 @@ public class TransCodeTask implements Runnable {
             String line = null;
 
             while ((line = br.readLine()) != null) {
-                log.debug(">>>>>正在转码【2】, 转码视频的 persistentid:【"+videoJob.getPersistentid()+"】 "+line);
+//                log.debug(">>>>>正在转码【2】, 转码视频的 persistentid:【"+videoJob.getPersistentid()+"】 "+line);
 //                int exitVal = proc.waitFor();
 //                System.out.println("Success Process exitValue: " + exitVal);
             }

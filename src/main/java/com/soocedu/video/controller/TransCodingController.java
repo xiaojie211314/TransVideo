@@ -2,7 +2,6 @@ package com.soocedu.video.controller;/**
  * Created by Administrator on 2017/6/19 0019.
  */
 
-import com.soocedu.httpclient.HttpclientUtil;
 import com.soocedu.video.bean.VideoCall;
 import com.soocedu.video.bean.VideoLook;
 import com.soocedu.video.bean.VideoResult;
@@ -10,7 +9,6 @@ import com.soocedu.video.service.TransCodingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -32,11 +29,6 @@ import java.util.List;
 @RequestMapping("/")
 public class TransCodingController {
     private Logger log = LoggerFactory.getLogger(TransCodingController.class);
-    @Autowired
-    private HttpclientUtil httpclientUtil;
-
-    @Resource(name = "taskExecutor")
-    private TaskExecutor taskExecutor;
 
     @Autowired
     private TransCodingService transCodingService;

@@ -15,6 +15,13 @@
 		<property name="username" value="${mysql.username}" />
 		<!--MySQL密码-->
 		<property name="password" value="${mysql.password}" />
+		<property name="testOnBorrow">
+			<value>true</value>
+		</property>
+		<property name="validationQuery">
+			<value>SELECT 1 FROM DUAL</value>
+		</property>
+
 	</bean>
 
 

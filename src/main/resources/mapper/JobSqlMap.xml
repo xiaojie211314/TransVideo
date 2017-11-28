@@ -3,12 +3,12 @@
 <mapper namespace="com.soocedu.video.dao.TransCodingMapper">
 
 
-    <insert id="insertJob" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertJob" >
         insert into video_job(filename,command,srcpath,despath,srcurl,desurl,status,counts,persistentid,persistentNotifyUrl,inputtime)values(#{filename},#{command},#{srcpath},#{despath},#{srcurl},#{desurl},#{status},#{counts},#{persistentid},#{persistentNotifyUrl},unix_timestamp())
     </insert>
 
     <update id="updateJob">
-        update video_job set despath = #{despath}, desurl=#{desurl}, counts=#{counts},msg=#{msg}, updatetime=unix_timestamp(), status=#{status}, error=#{error} where id=#{id}
+        update video_job set despath = #{despath}, desurl=#{desurl}, counts=#{counts},msg=#{msg}, updatetime=unix_timestamp(), status=#{status}, error=#{error} where persistentid=#{persistentid}
     </update>
 
 
