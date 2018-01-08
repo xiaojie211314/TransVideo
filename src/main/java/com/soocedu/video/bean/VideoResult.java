@@ -13,9 +13,19 @@ public class VideoResult extends BaseBean {
     private String key="";//上传返回文件相对路径
     private String hash = Uuids.getUUID();// hash值
     private String persistentId;//视频唯一识别 key
+    private String fdsDomain;//fastDFS 域名]
+    private String fdsUrl;//fastDFS 地址
 
-    public VideoResult(String key){
+    /**
+     * 构造函数
+     * @param key
+     * @param fdsDomain
+     * @param fdsUrl
+     */
+    public VideoResult(String key, String fdsDomain, String fdsUrl){
         this.key = key;
+        this.fdsDomain = fdsDomain;
+        this.fdsUrl = fdsUrl;
     }
 
     public VideoResult(){

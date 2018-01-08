@@ -3,7 +3,7 @@ package com.soocedu.video.bean;
 import lombok.Data;
 
 /**
- * TODO 简单描述该类的实现功能（可选）.
+ *  video工作任务 entity
  * <p>
  * Date:     2017/10/12
  *
@@ -28,6 +28,8 @@ public class VideoJob {
     private String persistentid;//	是	varchar	视频唯一值,uuid 格式,用来转码成功后告知服务器更新哪个视频
     private long inputtime ;//	是	date	视频插入时间
     private long updatetime;//	是	date	视频更新时间（开始转码，转码成功或转码失败）
+    private String fdsdomain="";//fastdfs 主域名
+    private String fdsurl="";//fastdfsurl 地址
     private String persistentNotifyUrl;//回调地址
 
     //附加

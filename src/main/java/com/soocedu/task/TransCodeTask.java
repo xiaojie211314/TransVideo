@@ -1,5 +1,8 @@
 package com.soocedu.task;
 
+import com.soocedu.fastdfs.FastDFSClient;
+import com.soocedu.fastdfs.domain.StorageNodeInfo;
+import com.soocedu.fastdfs.domain.StorePath;
 import com.soocedu.httpclient.HttpclientUtil;
 import com.soocedu.video.bean.VideoCall;
 import com.soocedu.video.bean.VideoJob;
@@ -9,9 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,12 +25,16 @@ public class TransCodeTask implements Runnable {
     private VideoJob videoJob;
 
 
-    public TransCodeTask(TransCodingMapper transCodingMapper, VideoJob videoJob, HttpclientUtil httpclientUtil) {
+    private FastDFSClient fastDFSClient;
+
+
+    public TransCodeTask(TransCodingMapper transCodingMapper, VideoJob videoJob, HttpclientUtil httpclientUtil, FastDFSClient fastDFSClient) {
 
 
         this.videoJob = videoJob;
         this.transCodingMapper = transCodingMapper;
         this.httpclientUtil = httpclientUtil;
+        this.fastDFSClient = fastDFSClient;
     }
 
     @Override
@@ -41,7 +46,7 @@ public class TransCodeTask implements Runnable {
             videoJob.setStatus(0);
             videoJob.setMsg("转码成功");
             transCodingMapper.updateJob(videoJob);
-            log.debug(">>>>>转码成功 【0】, 转码视频的 persistentid:【"+videoJob.getPersistentid()+"】 ");
+            log.info(">>>>>转码成功 【0】, 转码视频的 persistentid:【" + videoJob.getPersistentid() + "】 ");
 
             //像客户端发送消息,告知转码成功
         } else {
@@ -49,7 +54,7 @@ public class TransCodeTask implements Runnable {
             videoJob.setStatus(3);
             transCodingMapper.updateJob(videoJob);
             // 2 告知数据库转码失败.
-            log.debug(">>>>>转码执行失败【3】 , 转码视频的 persistentid:【"+videoJob.getPersistentid()+"】 ");
+            log.debug(">>>>>转码执行失败【3】 , 转码视频的 persistentid:【" + videoJob.getPersistentid() + "】 ");
 
 
         }
@@ -61,27 +66,51 @@ public class TransCodeTask implements Runnable {
     }
 
 
+    //回调
     private void callVideo(VideoJob videoJob) {
 
         VideoCall videoCall = new VideoCall();
 
-        videoCall.setId(videoJob.getPersistentid());
-        videoCall.setDesc("转码文件名称【" + videoJob.getFilename() + "】| 转码文件路径【" + videoJob.getDesurl() + "】");
-        List<VideoResult> videoResults = new ArrayList<>();
-        videoResults.add(new VideoResult(videoJob.getDesurl()));
-        videoCall.setItems(videoResults);
-        videoCall.setCode(videoJob.getStatus());
+
         if (videoJob.getStatus() == 0) {
             videoCall.setError("转码成功");
+
+
+            //是否用 fastdfs
+            if(fastDFSClient.isFdfs()) {
+
+                try {
+                    //转码成功调用 fastdfs
+                    StorePath storePath = fastDFSClient.uploadFile(new File(videoJob.getDespath()));
+                    StorageNodeInfo storageNodeInfo = fastDFSClient.getStroageInfo(storePath);
+
+                    videoJob.setFdsdomain(storageNodeInfo.getIp());
+                    videoJob. setFdsurl(storePath.getFullPath());
+                    log.debug(">>>>>上传 fastdfs 服务：返回 fastdfs 服务地址：【" + storageNodeInfo + "】");
+                } catch (Exception e) {
+                    videoCall.setError("上传 fastDFS 失败");
+                    videoJob.setStatus(3);
+                    videoJob.setError("上传 fastDFS 失败");
+                }
+
+            }
+
         } else {
             videoCall.setError("转码失败");
         }
+
+        videoCall.setCode(videoJob.getStatus());
+        videoCall.setId(videoJob.getPersistentid());
+        videoCall.setDesc("转码文件名称【" + videoJob.getFilename() + "】| 转码文件路径【" + videoJob.getDesurl() + "】");
+        List<VideoResult> videoResults = new ArrayList<>();
+        videoResults.add(new VideoResult(videoJob.getDesurl(), videoJob.getFdsdomain(), videoJob.getFdsurl()));
+        videoCall.setItems(videoResults);
 
         String result = httpclientUtil.post(videoJob.getPersistentNotifyUrl(), videoCall);
 
         if (!StringUtils.isEmpty(result)) {
             videoJob.setError("回调成功 【 " + result + " 】");
-            log.debug(">>>>>回调成功【"+videoJob.getStatus()+"】 ,视频的 persistentid:【"+videoJob.getPersistentid()+"】,");
+            log.info(">>>>>回调成功【" + videoJob.getStatus() + "】 ,视频的 persistentid:【" + videoJob.getPersistentid() + "】,");
 
         } else {
             //回调失败
@@ -91,7 +120,7 @@ public class TransCodeTask implements Runnable {
             }
             videoJob.setError("回调失败 【 " + result + " 】");
 
-            log.debug(">>>>>回调失败【"+videoJob.getStatus()+"】 ,视频的 persistentid:【"+videoJob.getPersistentid()+"】,");
+            log.info(">>>>>回调失败【" + videoJob.getStatus() + "】 ,视频的 persistentid:【" + videoJob.getPersistentid() + "】,");
 
         }
 
@@ -128,8 +157,9 @@ public class TransCodeTask implements Runnable {
 
         //正在转码中
         videoJob.setStatus(2);
+        videoJob.setMsg("正在转码");
 
-        log.debug(">>>>>正在转码【2】 , 转码视频的 persistentid:【"+videoJob.getPersistentid()+"】 ");
+        log.info(">>>>>正在转码【2】 , 转码视频的 persistentid:【" + videoJob.getPersistentid() + "】 ");
 
         transCodingMapper.updateJob(videoJob);
         try {
@@ -141,7 +171,7 @@ public class TransCodeTask implements Runnable {
             String line = null;
 
             while ((line = br.readLine()) != null) {
-//                log.debug(">>>>>正在转码【2】, 转码视频的 persistentid:【"+videoJob.getPersistentid()+"】 "+line);
+                log.debug(">>>>>正在转码【2】, 转码视频的 persistentid:【"+videoJob.getPersistentid()+"】 "+line);
 //                int exitVal = proc.waitFor();
 //                System.out.println("Success Process exitValue: " + exitVal);
             }
@@ -157,7 +187,7 @@ public class TransCodeTask implements Runnable {
                 if (counts < 3) {
                     videoJob.setCounts(videoJob.getCounts() + 1);
 
-                    log.debug(">>>>>转码失败重新转码状态【2】，转码次数【"+videoJob.getCounts()+"】, 转码视频的 persistentid:【"+videoJob.getPersistentid()+"】 ");
+                    log.info(">>>>>转码失败重新转码状态【2】，转码次数【" + videoJob.getCounts() + "】, 转码视频的 persistentid:【" + videoJob.getPersistentid() + "】 ");
                     transfer();
                 }
 
@@ -168,13 +198,13 @@ public class TransCodeTask implements Runnable {
 
         } catch (Throwable t) {
             //判断转码次数是否大于三次  如果小于3次 重新转码
-            log.debug(">>>>>转码异常..",t.getCause());
+            log.warn(">>>>>转码异常..", t.getCause());
 
             //获取转码次数
             int counts = videoJob.getCounts();
             if (counts < 3) {
                 videoJob.setCounts(videoJob.getCounts() + 1);
-                log.debug(">>>>>转码失败重新转码状态【2】，转码次数【"+videoJob.getCounts()+"】, 转码视频的 persistentid:【"+videoJob.getPersistentid()+"】 ");
+                log.debug(">>>>>转码失败重新转码状态【2】，转码次数【" + videoJob.getCounts() + "】, 转码视频的 persistentid:【" + videoJob.getPersistentid() + "】 ");
 
                 transfer();
             }

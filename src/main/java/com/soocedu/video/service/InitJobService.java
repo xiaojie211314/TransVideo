@@ -1,5 +1,6 @@
 package com.soocedu.video.service;
 
+import com.soocedu.fastdfs.FastDFSClient;
 import com.soocedu.httpclient.HttpclientUtil;
 import com.soocedu.task.TransCodeTask;
 import com.soocedu.video.bean.VideoDir;
@@ -35,6 +36,10 @@ public class InitJobService {
     @Autowired
     private VideoDir videoDir;
 
+    @Autowired
+    private FastDFSClient fastDFSClient;
+
+
     @PostConstruct
     public void init(){
 
@@ -48,7 +53,7 @@ public class InitJobService {
 
                 videoJob.setStatus(1);
 
-                taskExecutor.execute(new TransCodeTask(transCodingMapper,videoJob,httpclientUtil));
+                taskExecutor.execute(new TransCodeTask(transCodingMapper,videoJob,httpclientUtil,fastDFSClient));
             }
     }
 

@@ -17,4 +17,6 @@ public class VideoCall extends  BaseBean{
     private String desc;//视频转码说明
 
     private List<VideoResult> items;
+
+
 }

@@ -6,16 +6,17 @@
 	   default-autowire="byName" default-lazy-init="false">
 
 	<!-- 定义httpclient连接池 -->
-	<bean id="connectionManager" class="org.apache.http.impl.conn.PoolingHttpClientConnectionManager" destroy-method="close">
+	<bean id="pooConnectionManager" class="org.apache.http.impl.conn.PoolingHttpClientConnectionManager" destroy-method="close">
 		<!-- 设置连接总数 -->
 		<property name="maxTotal" value="${http.pool.maxTotal}" />
 		<!-- 设置每个地址的并发数 -->
 		<property name="defaultMaxPerRoute" value="${http.pool.defaultMaxPerRoute}" />
+
 	</bean>
 
 	<!-- 定义 HttpClient工厂，这里使用HttpClientBuilder构建-->
 	<bean id="httpClientBuilder" class="org.apache.http.impl.client.HttpClientBuilder" factory-method="create">
-		<property name="connectionManager" ref="connectionManager" />
+		<property name="connectionManager" ref="pooConnectionManager" />
 	</bean>
 
 	<!-- 得到httpClient的实例 -->
@@ -31,6 +32,7 @@
 		<property name="socketTimeout" value="${http.request.socketTimeout}"/>
 		<!-- 提交请求前测试连接是否可用 -->
 		<property name="staleConnectionCheckEnabled" value="${http.request.staleConnectionCheckEnabled}"/>
+
 	</bean>
 
 	<!-- 得到requestConfig实例 -->

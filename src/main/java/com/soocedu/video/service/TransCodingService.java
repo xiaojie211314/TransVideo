@@ -1,6 +1,7 @@
 package com.soocedu.video.service;
 
 import com.alibaba.fastjson.JSON;
+import com.soocedu.fastdfs.FastDFSClient;
 import com.soocedu.httpclient.HttpclientUtil;
 import com.soocedu.task.TransCodeTask;
 import com.soocedu.util.Const;
@@ -37,6 +38,11 @@ public class TransCodingService {
 
     @Autowired
     private VideoDir videoDir;//视频目录
+
+    @Autowired
+    private FastDFSClient fastDFSClient;
+
+
 
 
     //上传
@@ -125,7 +131,7 @@ public class TransCodingService {
             log.debug(">>>插入数据库 ，插入任务成功【1】 >>>>video Persistentid: " + videoJob.getPersistentid());
 //
 //            //转码
-            taskExecutor.execute(new TransCodeTask(transCodingMapper, videoJob, httpclientUtil));
+            taskExecutor.execute(new TransCodeTask(transCodingMapper, videoJob, httpclientUtil,fastDFSClient));
 //
 //
 //
@@ -173,7 +179,7 @@ public class TransCodingService {
         videoCall.setId(videoJob.getPersistentid());
         videoCall.setDesc(videoJob.getMsg());
         List<VideoResult> listItems = new ArrayList<>();
-        listItems.add(new VideoResult(videoJob.getDesurl()));
+        listItems.add(new VideoResult(videoJob.getDesurl(), videoJob.getFdsdomain(), videoJob.getFdsurl()));
         videoCall.setItems(listItems);
 
         return videoCall;

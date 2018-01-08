@@ -8,7 +8,7 @@
     </insert>
 
     <update id="updateJob">
-        update video_job set despath = #{despath}, desurl=#{desurl}, counts=#{counts},msg=#{msg}, updatetime=unix_timestamp(), status=#{status}, error=#{error} where persistentid=#{persistentid}
+        update video_job set despath = #{despath}, desurl=#{desurl}, counts=#{counts},msg=#{msg}, updatetime=unix_timestamp(), status=#{status}, error=#{error},fdsdomain=#{fdsdomain},fdsurl=#{fdsurl}  where persistentid=#{persistentid}
     </update>
 
 

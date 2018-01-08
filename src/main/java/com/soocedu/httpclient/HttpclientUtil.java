@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 
 /**
  * TODO 简单描述该类的实现功能（可选）.
@@ -58,7 +59,9 @@ public class HttpclientUtil {
     private String doPost(String url, VideoCall videoCall) {
         try {
             HttpPost httpPost = new HttpPost(url);
-            httpPost.setEntity(new StringEntity(JSON.toJSONString(videoCall)));
+            httpPost.setEntity(new StringEntity(JSON.toJSONString(videoCall), Charset.forName("utf-8")));
+            httpPost.setHeader("Content-Type", "application/json; charset=utf-8");
+            httpPost.setHeader("accept","application/json");
             HttpResponse response = httpClient.execute(httpPost);
             HttpEntity entity = response.getEntity();
             if (entity != null) {
