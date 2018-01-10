@@ -4,7 +4,7 @@
 
 
     <insert id="insertJob" >
-        insert into video_job(filename,command,srcpath,despath,srcurl,desurl,status,counts,persistentid,persistentNotifyUrl,inputtime)values(#{filename},#{command},#{srcpath},#{despath},#{srcurl},#{desurl},#{status},#{counts},#{persistentid},#{persistentNotifyUrl},unix_timestamp())
+        insert into video_job(filename,command,srcpath,despath,srcurl,desurl,status,msg,counts,persistentid,persistentNotifyUrl,inputtime)values(#{filename},#{command},#{srcpath},#{despath},#{srcurl},#{desurl},#{status},#{msg},#{counts},#{persistentid},#{persistentNotifyUrl},unix_timestamp())
     </insert>
 
     <update id="updateJob">
@@ -19,7 +19,7 @@
 
     <!--根据 persistentId 查询视频-->
     <select id="findVideoByPersistentId" resultType="com.soocedu.video.bean.VideoJob" >
-        select id,filename,command,srcpath,despath,srcurl,desurl,status,counts,msg,error,persistentid from video_job where persistentid=#{persistentId}
+        select id,filename,command,srcpath,despath,srcurl,desurl,status,counts,msg,error,persistentid,fdsdomain,fdsurl from video_job where persistentid=#{persistentId}
     </select>
 
 

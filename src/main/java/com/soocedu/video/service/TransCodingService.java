@@ -115,6 +115,7 @@ public class TransCodingService {
             videoJob.setSrcurl(uploadResult.getKey());
             videoJob.setStatus(1);//等待转码
             videoJob.setCounts(1);
+            videoJob.setMsg("等待转码");
             videoJob.setPersistentid(uploadResult.getPersistentId());
             //设置转码地址
             videoJob.setDespath(videoDir.getUploadRootDir() + videoDir.getOutDir() + uploadFile.getOutkey());
@@ -173,15 +174,17 @@ public class TransCodingService {
 
     public VideoCall findVideoByPersistentId(String persistentId) {
         VideoJob videoJob = transCodingMapper.findVideoByPersistentId(persistentId);
-        VideoCall videoCall = new VideoCall();
-        videoCall.setCode(videoJob.getStatus());
-        videoCall.setError(videoJob.getError());
-        videoCall.setId(videoJob.getPersistentid());
-        videoCall.setDesc(videoJob.getMsg());
-        List<VideoResult> listItems = new ArrayList<>();
-        listItems.add(new VideoResult(videoJob.getDesurl(), videoJob.getFdsdomain(), videoJob.getFdsurl()));
-        videoCall.setItems(listItems);
 
+        VideoCall videoCall = new VideoCall();
+        if(null!=videoJob) {
+            videoCall.setCode(videoJob.getStatus());
+            videoCall.setError(videoJob.getError());
+            videoCall.setId(videoJob.getPersistentid());
+            videoCall.setDesc(videoJob.getMsg());
+            List<VideoResult> listItems = new ArrayList<>();
+            listItems.add(new VideoResult(videoJob.getDesurl(), videoJob.getFdsdomain(), videoJob.getFdsurl()));
+            videoCall.setItems(listItems);
+        }
         return videoCall;
     }
 
