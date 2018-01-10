@@ -43,7 +43,12 @@ public class TransCodeTask implements Runnable {
         if (transfer()) {
             //1 修改数据库成功状态 , 0 表示转码成功 1 表示正在转码队列中  2 转码进行中  3 表示转码失败
 
-            videoJob.setStatus(0);
+            //是否用 fastdfs
+            if(fastDFSClient.isFdfs()) {
+                videoJob.setStatus(5);
+            }else{
+                videoJob.setStatus(0);
+            }
             videoJob.setMsg("转码成功");
             transCodingMapper.updateJob(videoJob);
             log.info(">>>>>转码成功 【0】, 转码视频的 persistentid:【" + videoJob.getPersistentid() + "】 ");
@@ -52,6 +57,8 @@ public class TransCodeTask implements Runnable {
         } else {
             // 1 修改数据库转码失败状态
             videoJob.setStatus(3);
+            videoJob.setMsg("转码失败");
+            videoJob.setError("转码失败");
             transCodingMapper.updateJob(videoJob);
             // 2 告知数据库转码失败.
             log.debug(">>>>>转码执行失败【3】 , 转码视频的 persistentid:【" + videoJob.getPersistentid() + "】 ");
@@ -86,17 +93,24 @@ public class TransCodeTask implements Runnable {
 
                     videoJob.setFdsdomain(storageNodeInfo.getIp());
                     videoJob. setFdsurl(storePath.getFullPath());
+                    videoJob.setMsg("转码成功 | 上传 fastDFS 成功");
+                    videoJob.setStatus(0);
+                    videoCall.setError("转码成功 | 上传 fastDFS 成功");
+
                     log.debug(">>>>>上传 fastdfs 服务：返回 fastdfs 服务地址：【" + storageNodeInfo + "】");
                 } catch (Exception e) {
-                    videoCall.setError("上传 fastDFS 失败");
-                    videoJob.setStatus(3);
+
+                    videoJob.setMsg("转码成功 | 上传 fastDFS 失败");
                     videoJob.setError("上传 fastDFS 失败");
+                    videoJob.setStatus(3);
+
+                    videoCall.setError("转码成功 | 上传 fastDFS 失败");
+
+
                 }
 
             }
 
-        } else {
-            videoCall.setError("转码失败");
         }
 
         videoCall.setCode(videoJob.getStatus());
@@ -106,24 +120,26 @@ public class TransCodeTask implements Runnable {
         videoResults.add(new VideoResult(videoJob.getDesurl(), videoJob.getFdsdomain(), videoJob.getFdsurl()));
         videoCall.setItems(videoResults);
 
+
+
+        //回调
         String result = httpclientUtil.post(videoJob.getPersistentNotifyUrl(), videoCall);
 
         if (!StringUtils.isEmpty(result)) {
+            videoJob.setMsg(videoJob.getMsg().concat(" | 回调成功 "));
             videoJob.setError("回调成功 【 " + result + " 】");
-            log.info(">>>>>回调成功【" + videoJob.getStatus() + "】 ,视频的 persistentid:【" + videoJob.getPersistentid() + "】,");
 
         } else {
             //回调失败
             //如果转码失败的话，回调后不更新状态
             if (videoJob.getStatus() != 3) {
                 videoJob.setStatus(4);
+                videoJob.setMsg(videoJob.getMsg().concat(" | 回调失败 "));
+                videoJob.setError("回调失败 【 " + result + " 】");
             }
-            videoJob.setError("回调失败 【 " + result + " 】");
-
-            log.info(">>>>>回调失败【" + videoJob.getStatus() + "】 ,视频的 persistentid:【" + videoJob.getPersistentid() + "】,");
 
         }
-
+        log.info(">>>>>"+videoJob.getMsg()+"【" + videoJob.getStatus() + "】 ,视频的 persistentid:【" + videoJob.getPersistentid() + "】,");
 
         transCodingMapper.updateJob(videoJob);
     }
