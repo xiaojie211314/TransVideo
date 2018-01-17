@@ -63,7 +63,7 @@ public class Token {
     }
 
     /**
-     * 检查sign是否下砸 
+     * 检查sign是否下砸
      */
     public boolean isValidCallback(String accessKey) {
         //根据encodedPutPolicy 使用hmac_sha1进行签名
@@ -88,7 +88,12 @@ public class Token {
         String[] voptArray = vOptions.split("/");
         JSONObject optJson = new JSONObject();
         for(int i=0; i<voptArray.length;i++){
-            optJson.put(voptArray[i],voptArray[++i]);
+            int k = i;
+            int j=++i;
+            if(j>=voptArray.length){
+                break;
+            }
+            optJson.put(voptArray[k],voptArray[j]);
         }
 
         return  optJson;
